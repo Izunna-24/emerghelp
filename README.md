@@ -1,1 +1,1 @@
-A platform that allows users order medical help in the case of emergency
+A platform that allows users order medical help in the case of health emergency
