@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
+import static java.time.LocalDateTime.now;
 
 @Entity
 @Setter
@@ -40,4 +41,11 @@ public class EmergencyRequest {
     @ManyToOne
     @JoinColumn(name = "medic_id")
     private MedicalPractitioner medic;
+    @OneToOne
+    private MedicalReport medicalReport;
+
+    @PrePersist
+    private void setRequestTime(){
+        requestTime = now();
+    }
 }

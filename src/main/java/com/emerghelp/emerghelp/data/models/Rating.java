@@ -1,7 +1,6 @@
 package com.emerghelp.emerghelp.data.models;
 
 
-import com.emerghelp.emerghelp.data.constants.Role;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -9,14 +8,14 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.AnyDiscriminator;
 
 import java.time.LocalDateTime;
 
-import static com.emerghelp.emerghelp.data.constants.Role.USER;
 import static jakarta.persistence.GenerationType.IDENTITY;
+import static java.time.LocalDateTime.now;
 
 @Entity
 @Getter
@@ -35,6 +34,7 @@ public class Rating {
     @JoinColumn(name = "medic_id", nullable = false)
     private MedicalPractitioner medicRated;
     private String comment;
+    @Setter(AccessLevel.NONE)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime timeRated;
@@ -42,7 +42,10 @@ public class Rating {
     @Max(5)
     private Integer score;
 
-
+    @PrePersist
+    private void setTimeRated(){
+        timeRated = now();
+    }
 
 
 
