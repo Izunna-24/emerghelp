@@ -4,6 +4,8 @@ import com.emerghelp.emerghelp.data.constants.Role;
 import com.emerghelp.emerghelp.data.models.User;
 import com.emerghelp.emerghelp.data.repositories.UserRepository;
 import com.emerghelp.emerghelp.dtos.requests.RegisterUserRequest;
+import com.emerghelp.emerghelp.dtos.requests.RequestMedicRequest;
+import com.emerghelp.emerghelp.dtos.requests.UpdateProfileRequest;
 import com.emerghelp.emerghelp.dtos.responses.RegisterUserResponse;
 import com.emerghelp.emerghelp.services.UserService;
 import com.emerghelp.emerghelp.exceptions.UserNotFoundException;
@@ -60,5 +62,45 @@ public class EmerghelpUserService implements UserService {
         );
         return user;
     }
+
+    @Override
+    public User viewProfile(Long id) {
+        return null;
     }
+
+    @Override
+    public User updateProfile(UpdateProfileRequest updateProfileRequest) {
+        return null;
+    }
+
+    @Override
+    public User requestMedic(RequestMedicRequest requestMedicRequest) {
+        return null;
+    }
+
+    @Override
+    public User viewAllRequests() {
+        return null;
+    }
+
+    @Override
+    public User getRequestById(Long id) {
+        return null;
+    }
+
+    @Override
+    public User rateMedic() {
+        return null;
+    }
+
+    @Override
+    public User sendMessage() {
+        return null;
+    }
+
+    @Override
+    public User cancelRequest() {
+        return null;
+    }
+}
 
