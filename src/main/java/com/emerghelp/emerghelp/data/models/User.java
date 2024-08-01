@@ -24,13 +24,11 @@ public class User {
     private String phoneNumber;
     @Column(unique = true)
     private String email;
-    private String username;
     private String password;
     private Gender gender;
-    private String photoUrl;
     @OneToOne
     private Address address;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(value = STRING)
     private Set<Role> roles;
 

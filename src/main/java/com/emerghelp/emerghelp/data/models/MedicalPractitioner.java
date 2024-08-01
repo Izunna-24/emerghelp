@@ -1,7 +1,7 @@
 package com.emerghelp.emerghelp.data.models;
 
 
-import com.emerghelp.emerghelp.data.constants.Role;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +19,7 @@ public class MedicalPractitioner {
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+    private String photoUrl;
     private String specialization;
     @Column(nullable = false,unique = true)
     private String licenseNumber;

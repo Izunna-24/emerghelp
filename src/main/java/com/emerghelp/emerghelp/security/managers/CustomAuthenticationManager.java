@@ -8,8 +8,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
-@AllArgsConstructor
+
 @Component
+@AllArgsConstructor
 public class CustomAuthenticationManager implements AuthenticationManager {
 
 private final AuthenticationProvider authenticationProvider;
@@ -19,7 +20,7 @@ private final AuthenticationProvider authenticationProvider;
         Class<? extends Authentication> authenticationType = authentication.getClass();
         if (authenticationProvider.supports(authenticationType))
             return authenticationProvider.authenticate(authentication);
-        else throw new BadCredentialsException("wrong details");
+        else throw new BadCredentialsException("invalid username or password");
 
     }
 
