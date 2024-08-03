@@ -7,5 +7,5 @@ import com.emerghelp.emerghelp.dtos.responses.RegisterUserResponse;
 public interface UserService {
 RegisterUserResponse register(RegisterUserRequest registerUserRequest);
 User getById(Long id);
-User getUserByUsername(String username);
+User getUserByEmail(String username);
 }

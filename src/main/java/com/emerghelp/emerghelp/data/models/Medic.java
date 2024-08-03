@@ -11,8 +11,8 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity
 @Setter
 @Getter
-@Table(name = "medical_practitioner")
-public class MedicalPractitioner {
+@Table(name = "medic")
+public class Medic {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;

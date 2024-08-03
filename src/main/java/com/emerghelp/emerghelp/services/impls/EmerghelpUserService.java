@@ -54,10 +54,10 @@ public class EmerghelpUserService implements UserService {
     }
 
     @Override
-    public User getUserByUsername(String username) {
-    User user = userRepository.findByEmail(username)
-            .orElseThrow(()-> new UserNotFoundException("user not found")
-        );
+    public User getUserByEmail(String email) {
+    User user = userRepository.findByEmail(email)
+            .orElseThrow(()-> new UserNotFoundException
+             (String.format("user with email %s not found", email)));
         return user;
     }
     }

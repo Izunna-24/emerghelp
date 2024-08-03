@@ -40,7 +40,7 @@ public class EmergencyRequest {
     private RequestStatus requestStatus;
     @ManyToOne
     @JoinColumn(name = "medic_id")
-    private MedicalPractitioner medic;
+    private Medic medic;
     @OneToOne
     private MedicalReport medicalReport;
 
