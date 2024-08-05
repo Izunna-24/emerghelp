@@ -24,7 +24,7 @@ public class MedicalReport {
     private Long id;
     @ManyToOne
     private Medic medic;
-    private String message;
+    private String reportDetails;
     @ManyToOne
     private User patient;
 

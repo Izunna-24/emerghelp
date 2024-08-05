@@ -20,8 +20,8 @@ import static java.time.LocalDateTime.now;
 @Entity
 @Setter
 @Getter
-@Table(name = "emergency_request")
-public class EmergencyRequest {
+@Table(name = "request")
+public class Request {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
@@ -30,8 +30,6 @@ public class EmergencyRequest {
     private User user;
     @Column(nullable = false)
     private String description;
-    @OneToOne
-    private Address address;
     @Setter(AccessLevel.NONE)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -43,6 +41,8 @@ public class EmergencyRequest {
     private Medic medic;
     @OneToOne
     private MedicalReport medicalReport;
+    private double latitude;
+    private double longitude;
 
     @PrePersist
     private void setRequestTime(){
