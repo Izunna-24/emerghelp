@@ -8,4 +8,8 @@ public interface UserService {
 RegisterUserResponse register(RegisterUserRequest registerUserRequest);
 User getById(Long id);
 User getUserByUsername(String username);
+
+User saveUser(User user);
+
+Boolean verifyToken(String token);
 }

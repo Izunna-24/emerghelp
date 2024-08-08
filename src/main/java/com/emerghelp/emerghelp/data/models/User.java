@@ -18,7 +18,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 public class User {
 @Id
 @GeneratedValue(strategy = IDENTITY)
-    private Long id;
+    private Long userId;
     private String firstName;
     private String lastName;
     private String phoneNumber;
@@ -31,5 +31,5 @@ public class User {
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(value = STRING)
     private Set<Role> roles;
-
+    private boolean isEnabled;
 }
