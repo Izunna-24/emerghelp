@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Set;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -26,6 +25,8 @@ public class Medic {
     @Column(nullable = false,unique = true)
     private String licenseNumber;
     private Boolean isAvailable;
+    private String longitude;
+    private String latitude;
 
 
 }

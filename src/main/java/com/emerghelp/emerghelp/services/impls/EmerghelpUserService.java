@@ -1,12 +1,17 @@
 package com.emerghelp.emerghelp.services.impls;
 
+import com.emerghelp.emerghelp.data.constants.RequestStatus;
 import com.emerghelp.emerghelp.data.constants.Role;
+import com.emerghelp.emerghelp.data.models.Medic;
+import com.emerghelp.emerghelp.data.models.MedicRequest;
 import com.emerghelp.emerghelp.data.models.User;
-import com.emerghelp.emerghelp.data.repositories.RequestRepository;
+import com.emerghelp.emerghelp.data.repositories.MedicRepository;
+import com.emerghelp.emerghelp.data.repositories.MedicRequestRepository;
 import com.emerghelp.emerghelp.data.repositories.UserRepository;
-import com.emerghelp.emerghelp.dtos.requests.MedicRequest;
+import com.emerghelp.emerghelp.dtos.requests.MedicRequestDTO;
 import com.emerghelp.emerghelp.dtos.requests.RegisterUserRequest;
 import com.emerghelp.emerghelp.dtos.responses.MedicRequestResponse;
+import com.emerghelp.emerghelp.dtos.responses.OrderMedicHistory;
 import com.emerghelp.emerghelp.dtos.responses.RegisterUserResponse;
 import com.emerghelp.emerghelp.services.UserService;
 import com.emerghelp.emerghelp.exceptions.UserNotFoundException;
@@ -15,9 +20,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
+import static com.emerghelp.emerghelp.Utils.LocationUtils.EARTH_RADIUS;
+import static com.emerghelp.emerghelp.data.constants.RequestStatus.PENDING;
 import static com.emerghelp.emerghelp.data.constants.Role.USER;
 
 @Service
@@ -25,17 +31,16 @@ public class EmerghelpUserService implements UserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
-    private final RequestRepository requestRepository;
+
 
     @Autowired
     public EmerghelpUserService(UserRepository userRepository,
                                 ModelMapper modelMapper,
                                 PasswordEncoder passwordEncoder,
-                                RequestRepository requestRepository) {
+                                MedicRequestRepository medicRequestRepository, MedicRepository medicRepository) {
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.requestRepository = requestRepository;
     }
 
 
@@ -61,19 +66,10 @@ public class EmerghelpUserService implements UserService {
 
     @Override
     public User getUserByEmail(String email) {
-        User user = userRepository.findByEmail(email)
+        return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException
                         (String.format("user with email %s not found", email)));
-        return user;
     }
 
-    @Override
-    public MedicRequestResponse requestMedic(Long email, MedicRequest medicRequest) {
-        User user = userRepository.findById(email)
-                .orElseThrow(()-> new UserNotFoundException
-                        (String.format("email %s does not not exist", email)));
-        return null;
-    }
 
 }
-
