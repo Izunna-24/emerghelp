@@ -32,4 +32,5 @@ public class User {
     @Enumerated(value = STRING)
     private Set<Role> roles;
 
+
 }

@@ -48,4 +48,6 @@ public class EmergencyRequest {
     private void setRequestTime(){
         requestTime = now();
     }
+
+
 }

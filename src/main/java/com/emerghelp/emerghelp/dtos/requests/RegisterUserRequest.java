@@ -15,4 +15,5 @@ private String email;
 private String password;
 private String phoneNumber;
 private Gender gender;
+private String profilePictureUrl;
 }
