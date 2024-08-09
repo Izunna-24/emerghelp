@@ -32,14 +32,13 @@ public class UserServiceTest {
         RegisterUserRequest request = new RegisterUserRequest();
         request.setFirstName("Jumoke");
         request.setLastName("Joseph");
-        request.setEmail("ridrijulmi2@gufum.com");
+        request.setEmail("ike20743@gmail.com");
         request.setPassword("password");
         request.setGender(UNDEFINED);
         request.setPhoneNumber("09078480034");
         RegisterUserResponse response = userService.register(request);
         assertNotNull(response);
         assertTrue(response.getMessage().contains("success"));
-
     }
 
 

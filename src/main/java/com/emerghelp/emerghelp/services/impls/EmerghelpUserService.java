@@ -1,48 +1,45 @@
 package com.emerghelp.emerghelp.services.impls;
 
-import com.emerghelp.emerghelp.data.constants.RequestStatus;
 import com.emerghelp.emerghelp.data.constants.Role;
-import com.emerghelp.emerghelp.data.models.Medic;
-import com.emerghelp.emerghelp.data.models.MedicRequest;
+import com.emerghelp.emerghelp.data.models.Confirmation;
 import com.emerghelp.emerghelp.data.models.User;
-import com.emerghelp.emerghelp.data.repositories.MedicRepository;
-import com.emerghelp.emerghelp.data.repositories.MedicRequestRepository;
+import com.emerghelp.emerghelp.data.repositories.ConfirmationRepository;
 import com.emerghelp.emerghelp.data.repositories.UserRepository;
-import com.emerghelp.emerghelp.dtos.requests.MedicRequestDTO;
 import com.emerghelp.emerghelp.dtos.requests.RegisterUserRequest;
-import com.emerghelp.emerghelp.dtos.responses.MedicRequestResponse;
-import com.emerghelp.emerghelp.dtos.responses.OrderMedicHistory;
 import com.emerghelp.emerghelp.dtos.responses.RegisterUserResponse;
+import com.emerghelp.emerghelp.exceptions.EmailAlreadyExistException;
+import com.emerghelp.emerghelp.services.EmailService;
 import com.emerghelp.emerghelp.services.UserService;
 import com.emerghelp.emerghelp.exceptions.UserNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
-
-import static com.emerghelp.emerghelp.Utils.LocationUtils.EARTH_RADIUS;
-import static com.emerghelp.emerghelp.data.constants.RequestStatus.PENDING;
 import static com.emerghelp.emerghelp.data.constants.Role.USER;
+
 
 @Service
 public class EmerghelpUserService implements UserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
+    private final ConfirmationRepository confirmationRepository;
+    private final EmailService emailService;
 
 
     @Autowired
     public EmerghelpUserService(UserRepository userRepository,
                                 ModelMapper modelMapper,
                                 PasswordEncoder passwordEncoder,
-                                MedicRequestRepository medicRequestRepository, MedicRepository medicRepository) {
+                                ConfirmationRepository confirmationRepository, EmailService emailService) {
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.confirmationRepository = confirmationRepository;
+        this.emailService = emailService;
     }
-
 
     @Override
     public RegisterUserResponse register(RegisterUserRequest registerUserRequest) {
@@ -63,13 +60,51 @@ public class EmerghelpUserService implements UserService {
                 .orElseThrow(() -> new UserNotFoundException(
                         String.format("user with id %d not found", id)));
     }
-
     @Override
+    public User getUserByUsername(String username) {
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UserNotFoundException("user not found")
+                );
+        return user;
+    }
+    @Override
+    public User saveUser(User user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new EmailAlreadyExistException("Email already exists, consider logging in instead");
+        }
+
+        user.setEnabled(false);
+        userRepository.save(user);
+        Confirmation confirmation = new Confirmation(user);
+        confirmationRepository.save(confirmation);
+        emailService.sendSimpleMailMessage(user.getFirstName(), user.getEmail(), confirmation.getToken());
+        return user;
+    }
+    @Override
+    public Boolean verifyToken(String token) {
+        try {
+            Confirmation confirmation = confirmationRepository.findByToken(token);
+            if (confirmation == null) {
+                return Boolean.FALSE;
+            }
+            User user = confirmation.getUser();
+            if (user == null) {
+                return Boolean.FALSE;
+            }
+            user.setEnabled(true);
+            userRepository.save(user);
+            return Boolean.TRUE;
+        } catch (DataAccessException e) {
+            System.err.println("Error accessing data: " + e.getMessage());
+            return Boolean.FALSE;
+        } catch (Exception e) {
+            System.err.println("Unexpected error: " + e.getMessage());
+            return Boolean.FALSE;
+        }
+    }
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException
                         (String.format("user with email %s not found", email)));
     }
-
-
 }

@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface MedicRequestRepository extends JpaRepository<MedicRequest, Long> {
 List<MedicRequest> viewAllRequestBy(Long userId);
+
+    List<MedicRequest> viewAllRequestById(Long id);
 }
