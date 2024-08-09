@@ -29,8 +29,6 @@ public class EmergHelpMedicOrderService implements MedicOrderService {
     private final MedicRequestRepository medicRequestRepository;
     private final MedicRepository medicRepository;
 
-
-
     @Autowired
     public EmergHelpMedicOrderService(UserRepository userRepository,
                                 ModelMapper modelMapper,
@@ -55,23 +53,20 @@ public class EmergHelpMedicOrderService implements MedicOrderService {
         medicRequestResponse.setAvailableMedic(availableMedic);
         return  medicRequestResponse;
     }
-
     @Override
     public MedicRequest getMedicOrderBy(long id) {
         return medicRequestRepository.findById(id)
                 .orElseThrow(()-> new OrderMedicNotFoundException("No order found"));
     }
-
     @Override
-    public List<OrderMedicHistory> viewAllOrderFor(Long userId) {
-        List<MedicRequest> medicRequests = medicRequestRepository.viewAllRequestBy(userId);
+    public List<OrderMedicHistory> viewAllOrderFor(Long id) {
+        List<MedicRequest> medicRequests = medicRequestRepository.viewAllRequestById(id);
         if (medicRequests == null || medicRequests.isEmpty()) {
             return Collections.emptyList();
         }
-        return medicRequests.stream().map(medicRequestItem -> modelMapper
-                .map(medicRequestItem, OrderMedicHistory.class)).toList();
+        return medicRequests.stream().map(emergencyRequestItem -> modelMapper
+                .map(emergencyRequestItem, OrderMedicHistory.class)).toList();
     }
-
     private MedicRequest buildMedicRequest(MedicRequestDTO medicRequestDTO, User user) {
         MedicRequest medicRequest = modelMapper.map(medicRequestDTO, MedicRequest.class);
         medicRequest.setUser(user);
@@ -81,8 +76,6 @@ public class EmergHelpMedicOrderService implements MedicOrderService {
         medicRequest.setLongitude(Double.parseDouble(medicRequestDTO.getLongitude()));
         return medicRequest;
     }
-
-
     private Double calculateDistance(Medic medic, MedicRequest medicRequest) {
         double lat1 = Math.toRadians(Double.parseDouble(medic.getLatitude()));
         double lon1 = Math.toRadians(Double.parseDouble(medic.getLongitude()));
@@ -96,8 +89,4 @@ public class EmergHelpMedicOrderService implements MedicOrderService {
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return EARTH_RADIUS * c;
     }
-
 }
-
-
-

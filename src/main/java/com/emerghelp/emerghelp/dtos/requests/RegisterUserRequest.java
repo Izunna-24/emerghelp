@@ -25,4 +25,5 @@ private String password;
 @Pattern(regexp = "^?\\+[0-9]{11,14}$",message = "invalid phone number")
 private String phoneNumber;
 private Gender gender;
+private String profilePictureUrl;
 }

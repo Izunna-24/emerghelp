@@ -3,8 +3,7 @@ package com.emerghelp.emerghelp.data.models;
 
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -17,6 +16,7 @@ public class Medic {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
+    private String email;
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -27,6 +27,4 @@ public class Medic {
     private Boolean isAvailable;
     private String longitude;
     private String latitude;
-
-
 }

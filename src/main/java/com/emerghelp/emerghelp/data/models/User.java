@@ -5,7 +5,6 @@ import com.emerghelp.emerghelp.data.constants.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails;
 
 import java.util.Set;
 
@@ -30,5 +29,6 @@ public class User {
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(value = STRING)
     private Set<Role> roles;
+    private boolean isEnabled;
 
 }
