@@ -24,7 +24,7 @@ import static java.time.LocalDateTime.now;
 public class MedicRequest {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private Long viewAllRequestById;
+    private Long id;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -43,6 +43,7 @@ public class MedicRequest {
     private MedicalReport medicalReport;
     private double latitude;
     private double longitude;
+
     @PrePersist
     private void setRequestTime(){
         requestTime = now();

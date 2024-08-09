@@ -12,7 +12,6 @@ import java.util.List;
 
 @Service
 public class EmergHelpRatingService implements RatingService {
-
     private final RatingRepository ratingRepository;
     private final UserRepository userRepository;
     private final MedicRepository medicRepository;
