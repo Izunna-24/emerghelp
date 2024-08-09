@@ -2,7 +2,7 @@ package com.emerghelp.emerghelp.services;
 
 import com.emerghelp.emerghelp.data.constants.Role;
 import com.emerghelp.emerghelp.data.models.User;
-import com.emerghelp.emerghelp.data.repositories.EmergencyRequestRepository;
+import com.emerghelp.emerghelp.data.repositories.MedicRequestRepository;
 import com.emerghelp.emerghelp.data.repositories.UserRepository;
 import com.emerghelp.emerghelp.dtos.requests.RegisterUserRequest;
 import com.emerghelp.emerghelp.dtos.responses.RegisterUserResponse;
@@ -40,7 +40,7 @@ public class UserServiceTest {
     private UserRepository userRepository;
 
     @Autowired
-    private EmergencyRequestRepository emergencyRequestRepository;
+    private MedicRequestRepository medicRequestRepository;
 
 
 

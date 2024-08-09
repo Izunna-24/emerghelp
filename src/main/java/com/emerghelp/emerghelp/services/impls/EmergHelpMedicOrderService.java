@@ -14,7 +14,6 @@ import com.emerghelp.emerghelp.exceptions.UserNotFoundException;
 import com.emerghelp.emerghelp.services.MedicOrderService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -65,8 +64,8 @@ public class EmergHelpMedicOrderService implements MedicOrderService {
         if (medicRequests == null || medicRequests.isEmpty()) {
             return Collections.emptyList();
         }
-        return medicRequests.stream().map(medicRequestItem -> modelMapper
-                .map(medicRequestItem, OrderMedicHistory.class)).toList();
+        return medicRequests.stream().map(emergencyRequestItem -> modelMapper
+                .map(emergencyRequestItem, OrderMedicHistory.class)).toList();
     }
     private MedicRequest buildMedicRequest(MedicRequestDTO medicRequestDTO, User user) {
         MedicRequest medicRequest = modelMapper.map(medicRequestDTO, MedicRequest.class);
