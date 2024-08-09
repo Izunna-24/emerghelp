@@ -44,14 +44,6 @@ public class UserServiceTest {
 
 
 
-//    @BeforeEach
-//    public void setUp() {
-//        EmergencyRequest request = new EmergencyRequest();
-//        request.setId(200L);
-//        emergencyRequestRepository.save(request);
-//    }
-
-
     @Test
     @DisplayName("test that user can be registered on the system")
     public void registerTest() {
@@ -66,7 +58,6 @@ public class UserServiceTest {
         assertNotNull(response);
         assertTrue(response.getMessage().contains("success"));
     }
-
 
 
 
@@ -119,21 +110,6 @@ public class UserServiceTest {
         assertThat(updatedProfile.getGender()).isEqualTo(UNDEFINED);
         assertThat(updatedProfile.getRoles()).containsExactly(Role.USER);
     }
-
-
-//    @Test
-//    @DisplayName("Test that user can view all requests")
-//    public void viewAllRequestByUserTest() {
-//        Long userId = 200L;
-//        User user = userRepository.findById(userId).get();
-//
-////        List<EmergencyRequest> requests = emergencyRequestRepository.findByUserId(userId);
-//        List<EmergencyRequest> requests = emergencyRequestRepository.findEmergencyRequestByUser(user);
-//        List<EmergencyRequest> userEmergencyRequests = userService.viewAllRequests(userId);
-//        assertThat(requests.size()).isEqualTo(userEmergencyRequests.size());
-//        assertThat(requests).hasSize(1);
-//        assertThat(userEmergencyRequests).hasSize(1);
-//    }
 
 
 
