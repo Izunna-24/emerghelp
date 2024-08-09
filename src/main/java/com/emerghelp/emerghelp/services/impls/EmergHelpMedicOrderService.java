@@ -10,7 +10,7 @@ import com.emerghelp.emerghelp.dtos.requests.MedicRequestDTO;
 import com.emerghelp.emerghelp.dtos.responses.MedicRequestResponse;
 import com.emerghelp.emerghelp.dtos.responses.OrderMedicHistory;
 import com.emerghelp.emerghelp.exceptions.OrderMedicNotFoundException;
-import com.emerghelp.emerghelp.exceptions.UserNotFoundException;
+import com.emerghelp.emerghelp.exceptions.Exception;
 import com.emerghelp.emerghelp.services.MedicOrderService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ public class EmergHelpMedicOrderService implements MedicOrderService {
     @Override
     public MedicRequestResponse orderMedic(MedicRequestDTO medicRequestDTO) {
         User user = userRepository.findById(medicRequestDTO.getUserId())
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
+                .orElseThrow(() -> new Exception("User not found"));
         MedicRequest medicRequest = buildMedicRequest(medicRequestDTO, user);
         List<Medic> allMedic = medicRepository.findAll();
         List<Medic> availableMedic = allMedic.stream()

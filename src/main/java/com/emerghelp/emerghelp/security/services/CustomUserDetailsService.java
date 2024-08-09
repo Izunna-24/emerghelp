@@ -1,7 +1,7 @@
 package com.emerghelp.emerghelp.security.services;
 
 import com.emerghelp.emerghelp.data.models.User;
-import com.emerghelp.emerghelp.exceptions.UserNotFoundException;
+import com.emerghelp.emerghelp.exceptions.Exception;
 import com.emerghelp.emerghelp.security.model.SecureUser;
 import com.emerghelp.emerghelp.services.UserService;
 import lombok.AllArgsConstructor;
@@ -21,7 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         try {
             User user = userService.getUserByEmail(username);
             return new SecureUser(user);
-        }catch (UserNotFoundException exception){
+        }catch (Exception exception){
             throw new UsernameNotFoundException(exception.getMessage());
         }
     }

@@ -13,18 +13,20 @@ import com.emerghelp.emerghelp.dtos.responses.RegisterUserResponse;
 import com.emerghelp.emerghelp.dtos.responses.UpdateProfileResponse;
 import com.emerghelp.emerghelp.dtos.responses.ViewProfileResponse;
 import com.emerghelp.emerghelp.exceptions.EmailAlreadyExistException;
+import com.emerghelp.emerghelp.exceptions.UserNotFoundException;
 import com.emerghelp.emerghelp.services.EmailService;
 import com.emerghelp.emerghelp.services.UserService;
-import com.emerghelp.emerghelp.exceptions.UserNotFoundException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
+import com.emerghelp.emerghelp.exceptions.Exception;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.util.*;
 import static com.emerghelp.emerghelp.data.constants.Role.USER;
 
@@ -71,7 +73,7 @@ public class EmerghelpUserService implements UserService {
     @Override
     public User getById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(
+                .orElseThrow(() -> new Exception(
                         String.format("user with id %d not found", id)));
     }
     @Override
@@ -118,7 +120,7 @@ public class EmerghelpUserService implements UserService {
     }
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException
+                .orElseThrow(() -> new Exception
                         (String.format("user with email %s not found", email)));
     }
 
