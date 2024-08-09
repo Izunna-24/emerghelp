@@ -1,13 +1,11 @@
 package com.emerghelp.emerghelp.services;
 
 import com.emerghelp.emerghelp.data.constants.Role;
-import com.emerghelp.emerghelp.data.models.EmergencyRequest;
 import com.emerghelp.emerghelp.data.models.User;
 import com.emerghelp.emerghelp.data.repositories.EmergencyRequestRepository;
 import com.emerghelp.emerghelp.data.repositories.UserRepository;
 import com.emerghelp.emerghelp.dtos.requests.RegisterUserRequest;
 import com.emerghelp.emerghelp.dtos.responses.RegisterUserResponse;
-import com.emerghelp.emerghelp.dtos.responses.UpdateProfileResponse;
 import com.emerghelp.emerghelp.dtos.responses.ViewProfileResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.TextNode;
@@ -17,14 +15,12 @@ import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import com.github.fge.jsonpatch.JsonPatchOperation;
 import com.github.fge.jsonpatch.ReplaceOperation;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -36,12 +32,16 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Sql(scripts = "/db/data.sql")
 public class UserServiceTest {
+
+
     @Autowired
     private UserService userService;
     @Autowired
-    private EmergencyRequestRepository emergencyRequestRepository;
-    @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private EmergencyRequestRepository emergencyRequestRepository;
+
 
 
 //    @BeforeEach
@@ -65,8 +65,12 @@ public class UserServiceTest {
         RegisterUserResponse response = userService.register(request);
         assertNotNull(response);
         assertTrue(response.getMessage().contains("success"));
-
     }
+
+
+
+
+
 
     @Test
     @DisplayName("test that user can view profile")

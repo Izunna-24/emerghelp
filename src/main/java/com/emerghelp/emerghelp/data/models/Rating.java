@@ -32,7 +32,7 @@ public class Rating {
 
     @ManyToOne
     @JoinColumn(name = "medic_id", nullable = false)
-    private MedicalPractitioner medicRated;
+    private Medic medicRated;
     private String comment;
     @Setter(AccessLevel.NONE)
     @JsonSerialize(using = LocalDateTimeSerializer.class)

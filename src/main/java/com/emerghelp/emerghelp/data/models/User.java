@@ -5,6 +5,7 @@ import com.emerghelp.emerghelp.data.constants.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails;
 
 import java.util.Set;
 
@@ -18,7 +19,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 public class User {
 @Id
 @GeneratedValue(strategy = IDENTITY)
-    private Long id;
+    private Long userId;
     private String firstName;
     private String lastName;
     private String phoneNumber;
@@ -26,11 +27,8 @@ public class User {
     private String email;
     private String password;
     private Gender gender;
-    @OneToOne
-    private Address address;
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(value = STRING)
     private Set<Role> roles;
-
-
+    private boolean isEnabled;
 }

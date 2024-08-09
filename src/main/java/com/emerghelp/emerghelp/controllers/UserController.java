@@ -1,45 +1,50 @@
 package com.emerghelp.emerghelp.controllers;
 
-import com.emerghelp.emerghelp.dtos.requests.RegisterUserRequest;
-import com.emerghelp.emerghelp.dtos.responses.RegisterUserResponse;
-import com.emerghelp.emerghelp.dtos.responses.UpdateProfileResponse;
-import com.emerghelp.emerghelp.dtos.responses.ViewProfileResponse;
-import com.emerghelp.emerghelp.exceptions.EmerghelpBaseException;
+import com.emerghelp.emerghelp.data.models.User;
+import com.emerghelp.emerghelp.dtos.responses.HttpResponse;
 import com.emerghelp.emerghelp.services.UserService;
-import com.github.fge.jsonpatch.JsonPatch;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static org.springframework.http.HttpStatus.*;
+import java.net.URI;
+import java.time.LocalDateTime;
+import java.util.Map;
+
 
 @RestController
-@AllArgsConstructor
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/users")
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/view/{user_id}")
-    public ResponseEntity<?> viewProfile(@PathVariable("user_id") long userId){
-        try{
-            ViewProfileResponse response = userService.viewProfile(userId);
-            return ResponseEntity.status(OK).body(response);
-        }catch(EmerghelpBaseException message){
-            return ResponseEntity.status(BAD_REQUEST).body(message.getMessage());
-        }
+    @PostMapping
+    public ResponseEntity<HttpResponse> createUser(@RequestBody User user) {
+        User newUser = userService.saveUser(user);
+        return ResponseEntity.created(URI.create("")).body(
+                HttpResponse.builder()
+                        .timeStamp(LocalDateTime.now().toString())
+                        .data(Map.of("user", newUser))
+                        .message("User created")
+                        .status(HttpStatus.CREATED)
+                        .statusCode(HttpStatus.CREATED.value())
+                        .build()
+        );
     }
 
-    @PatchMapping("/update/{user_id}")
-    public ResponseEntity<?> updateProfile(@PathVariable("user_id") long userId, @RequestBody JsonPatch jsonPatch) {
-        try {
-            UpdateProfileResponse response = userService.updateProfile(userId, jsonPatch);
-            return ResponseEntity.status(OK).body(response);
-        } catch (EmerghelpBaseException message) {
-            return ResponseEntity.status(BAD_REQUEST).body(message.getMessage());
-        }
+    @GetMapping
+    public ResponseEntity<HttpResponse> confirmUserAccount(@RequestParam("token") String token) {
+        Boolean isSuccess = userService.verifyToken(token);
+        return ResponseEntity.ok().body(
+                HttpResponse.builder()
+                        .timeStamp(LocalDateTime.now().toString())
+                        .data(Map.of("Success", isSuccess))
+                        .message("Account Verified")
+                        .status(HttpStatus.OK)
+                        .statusCode(HttpStatus.OK.value())
+                        .build()
+        );
     }
-
-
-
 }
