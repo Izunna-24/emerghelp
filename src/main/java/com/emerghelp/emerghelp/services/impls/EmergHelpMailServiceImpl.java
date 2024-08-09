@@ -28,6 +28,7 @@ public class EmergHelpMailServiceImpl implements EmailService {
     public static final String EMAIL_TEMPLATE = "emailtemplate";
     public static final String TEXT_HTML_ENCONDING = "text/html";
     private  JavaMailSender emailSender;
+
     private final TemplateEngine templateEngine;
 
 

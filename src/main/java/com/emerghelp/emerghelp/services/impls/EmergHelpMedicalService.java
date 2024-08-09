@@ -2,7 +2,6 @@ package com.emerghelp.emerghelp.services.impls;
 
 import com.emerghelp.emerghelp.data.constants.Role;
 import com.emerghelp.emerghelp.data.models.Medic;
-import com.emerghelp.emerghelp.data.models.MedicRequest;
 import com.emerghelp.emerghelp.data.models.User;
 import com.emerghelp.emerghelp.data.repositories.MedicRepository;
 import com.emerghelp.emerghelp.dtos.requests.AcceptOrderRequest;
@@ -20,8 +19,6 @@ import com.github.fge.jsonpatch.JsonPatchException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 
 
 @Service
@@ -42,8 +39,8 @@ public class EmergHelpMedicalService implements MedicalService {
     @Override
     public UpgradeToMedicalPractitionerResponse upgradeToMedicalPractitioner(UpgradeToMedicalPractitionerRequest request) {
         try {
-            User user = userService.getUserByUsername(request.getEmail());
-            user.getRoles().add(Role.MEDICAL_PRACTITIONER);
+            User user = userService.getUserByEmail(request.getEmail());
+            user.getRoles().add(Role.MEDIC);
             // userRepository.save(user);
             Medic medicalPractitioner = new Medic();
             medicalPractitioner.setPhotoUrl(request.getPhotoUrl());

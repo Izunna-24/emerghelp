@@ -15,7 +15,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 public class Medic {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private Long practitionerId;
+    private Long id;
     private String email;
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)

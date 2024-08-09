@@ -18,7 +18,7 @@ public class MailConfig {
     private String fromEmail;
 }
 
-
+//
 ////    @Value("$(spring.mail.username)")
 ////    private String fromMail;
 //
