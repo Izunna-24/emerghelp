@@ -9,8 +9,4 @@ import java.util.Optional;
 
 public interface MedicRepository extends JpaRepository<Medic,Long> {
 
-    Optional<Medic> findAvailableMedic();
-
-
-
 }

@@ -39,8 +39,8 @@ public class EmergHelpMedicalService implements MedicalService {
     @Override
     public UpgradeToMedicalPractitionerResponse upgradeToMedicalPractitioner(UpgradeToMedicalPractitionerRequest request) {
         try {
-            User user = userService.getUserByUsername(request.getEmail());
-            user.getRoles().add(Role.MEDICAL_PRACTITIONER);
+            User user = userService.getUserByEmail(request.getEmail());
+            user.getRoles().add(Role.MEDIC);
             // userRepository.save(user);
             Medic medicalPractitioner = new Medic();
             medicalPractitioner.setPhotoUrl(request.getPhotoUrl());

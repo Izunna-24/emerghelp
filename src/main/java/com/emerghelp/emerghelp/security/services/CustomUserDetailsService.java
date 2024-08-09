@@ -1,7 +1,6 @@
 package com.emerghelp.emerghelp.security.services;
 
 import com.emerghelp.emerghelp.data.models.User;
-import com.emerghelp.emerghelp.exceptions.Exception;
 import com.emerghelp.emerghelp.security.model.SecureUser;
 import com.emerghelp.emerghelp.services.UserService;
 import lombok.AllArgsConstructor;

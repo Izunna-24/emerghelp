@@ -20,7 +20,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
-import com.emerghelp.emerghelp.exceptions.Exception;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -73,16 +72,9 @@ public class EmerghelpUserService implements UserService {
     @Override
     public User getById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new Exception(
-                        String.format("user with id %d not found", id)));
+                .orElseThrow(() -> new UserNotFoundException(String.format("user with id %d not found", id)));
     }
-    @Override
-    public User getUserByUsername(String username) {
-        User user = userRepository.findByEmail(username)
-                .orElseThrow(() -> new UserNotFoundException("user not found")
-                );
-        return user;
-    }
+
     @Override
     public User saveUser(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
@@ -120,8 +112,7 @@ public class EmerghelpUserService implements UserService {
     }
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new Exception
-                        (String.format("user with email %s not found", email)));
+                .orElseThrow(() -> new UserNotFoundException(String.format("user with email %s not found", email)));
     }
 
     @Override
@@ -162,31 +153,6 @@ public class EmerghelpUserService implements UserService {
 
     }
 
-    @Override
-    public User requestMedic(RequestMedicRequest requestMedicRequest) {
-        return null;
-    }
 
-    @Override
-    public List<MedicRequest> viewAllRequests(Long id) {
-        User user = userRepository.findById(id).orElseThrow(()->new UserNotFoundException("User not found"));
-//     return emergencyRequestRepository.findByUserId(id);
-        return medicRequestRepository.findEmergencyRequestByUser(user);
 
-    }
-
-    @Override
-    public User getRequestById(Long id) {
-        return null;
-    }
-
-    @Override
-    public User rateMedic() {
-        return null;
-    }
-
-    @Override
-    public User cancelRequest() {
-        return null;
-    }
 }
