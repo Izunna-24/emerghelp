@@ -48,4 +48,6 @@ public class MedicRequest {
     private void setRequestTime(){
         requestTime = now();
     }
+
+
 }
