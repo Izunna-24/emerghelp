@@ -1,15 +1,12 @@
 package com.emerghelp.emerghelp.services.impls;
 
 import com.emerghelp.emerghelp.data.constants.Role;
-
 import com.emerghelp.emerghelp.data.models.Confirmation;
 import com.emerghelp.emerghelp.data.models.User;
-
 import com.emerghelp.emerghelp.data.repositories.ConfirmationRepository;
 import com.emerghelp.emerghelp.data.repositories.UserRepository;
 import com.emerghelp.emerghelp.dtos.requests.RegisterUserRequest;
 import com.emerghelp.emerghelp.dtos.responses.RegisterUserResponse;
-
 import com.emerghelp.emerghelp.exceptions.EmailAlreadyExistException;
 import com.emerghelp.emerghelp.services.EmailService;
 import com.emerghelp.emerghelp.services.UserService;
@@ -19,11 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
-import java.util.Set;
-
+import java.util.*;
 import static com.emerghelp.emerghelp.data.constants.Role.USER;
+
 
 @Service
 public class EmerghelpUserService implements UserService {
@@ -33,10 +28,12 @@ public class EmerghelpUserService implements UserService {
     private final ConfirmationRepository confirmationRepository;
     private final EmailService emailService;
 
+
     @Autowired
     public EmerghelpUserService(UserRepository userRepository,
                                 ModelMapper modelMapper,
-                                PasswordEncoder passwordEncoder, ConfirmationRepository confirmationRepository, EmailService emailService) {
+                                PasswordEncoder passwordEncoder,
+                                ConfirmationRepository confirmationRepository, EmailService emailService) {
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -105,6 +102,9 @@ public class EmerghelpUserService implements UserService {
             return Boolean.FALSE;
         }
     }
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException
+                        (String.format("user with email %s not found", email)));
+    }
 }
-
-

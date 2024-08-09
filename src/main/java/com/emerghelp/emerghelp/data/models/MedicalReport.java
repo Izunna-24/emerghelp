@@ -23,8 +23,8 @@ public class MedicalReport {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
     @ManyToOne
-    private MedicalPractitioner medic;
-    private String message;
+    private Medic medic;
+    private String reportDetails;
     @ManyToOne
     private User patient;
 

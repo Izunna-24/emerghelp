@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User,Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT U FROM User U WHERE U.email =:email")
     Optional<User> findByEmail(String email);
     Boolean existsByEmail(String email);

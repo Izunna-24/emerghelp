@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class AcceptOrderRequest {
-    private Long requestId;
+    private Long id;
     private User user;
     private String photoUrl;
     private String specialization;

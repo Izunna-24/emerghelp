@@ -1,6 +1,6 @@
 package com.emerghelp.emerghelp.services;
 
-import com.emerghelp.emerghelp.data.models.MedicalPractitioner;
+import com.emerghelp.emerghelp.data.models.Medic;
 import com.emerghelp.emerghelp.dtos.requests.AcceptOrderRequest;
 import com.emerghelp.emerghelp.dtos.requests.UpgradeToMedicalPractitionerRequest;
 import com.emerghelp.emerghelp.dtos.responses.AcceptOrderResponse;
@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service;
 public interface MedicalService {
 
     UpgradeToMedicalPractitionerResponse upgradeToMedicalPractitioner(UpgradeToMedicalPractitionerRequest Request);
-    AcceptOrderResponse acceptRequest(AcceptOrderRequest orderRequest);
+    AcceptOrderResponse acceptOrderMedic(AcceptOrderRequest request);
 
-    MedicalPractitioner getMedicalPractionerById(long id);
+    Medic getMedicalPractionerById(long id);
 
     UpdateMedicalResponse updateMedicalPractitioner(Long medicalPractitionerId, JsonPatch jsonPatch);
 }
