@@ -11,7 +11,5 @@ public class RegisterUserResponse {
     private String email;
     private String username;
     private String message;
-
-
 }
 

@@ -35,9 +35,17 @@ public class Confirmation {
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
+    @OneToOne(targetEntity = Medic.class, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false, name = "medic_id")
+    private Medic medic;
 
     public Confirmation(User user) {
         this.user = user;
+        this.createdDate = LocalDateTime.now();
+        this.token = UUID.randomUUID().toString();
+    }
+    public Confirmation(Medic medic) {
+        this.medic = medic;
         this.createdDate = LocalDateTime.now();
         this.token = UUID.randomUUID().toString();
     }
