@@ -11,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest
 public class MailServiceTest {
 
-    @Autowired
     private JavaMailSender emailSender;
     @Autowired
     private EmailService emailService;
@@ -20,11 +19,10 @@ public class MailServiceTest {
         String name = "ddon";
         String recipientEmail = "ericsonericdon66@gmail.com";
         String token = "some-secret-token";
-        SendMailResponse response = emailService.sendSimpleMailMessage(name, recipientEmail, token);
+        SendMailResponse response = emailService.sendHtmlEmail(name, recipientEmail, token);
         assertTrue(response.getMessage().contains("sent successfully"));
 
     }
-
     @Test
     public void testSendHtmlEmail() {
         String name = "Izuchukwu";

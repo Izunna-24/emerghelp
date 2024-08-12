@@ -6,7 +6,6 @@ import com.emerghelp.emerghelp.dtos.responses.*;
 import com.github.fge.jsonpatch.JsonPatch;
 import org.springframework.stereotype.Service;
 
-@Service
 public interface UserService {
 RegisterUserResponse register(RegisterUserRequest registerUserRequest);
 User getById(Long id);
