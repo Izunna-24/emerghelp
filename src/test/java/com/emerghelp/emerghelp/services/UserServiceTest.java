@@ -50,7 +50,7 @@ public class UserServiceTest {
         RegisterUserRequest request = new RegisterUserRequest();
         request.setFirstName("Jumoke");
         request.setLastName("Joseph");
-        request.setEmail("ridrijul22@gfum.com");
+        request.setEmail("ridrijul22@gfum1.com");
         request.setPassword("password");
         request.setGender(UNDEFINED);
         request.setPhoneNumber("09078480034");
