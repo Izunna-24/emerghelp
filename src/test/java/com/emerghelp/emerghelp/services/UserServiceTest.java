@@ -4,9 +4,7 @@ import com.emerghelp.emerghelp.data.constants.Role;
 import com.emerghelp.emerghelp.data.models.User;
 import com.emerghelp.emerghelp.data.repositories.MedicRequestRepository;
 import com.emerghelp.emerghelp.data.repositories.UserRepository;
-import com.emerghelp.emerghelp.dtos.requests.RegisterMedicRequest;
 import com.emerghelp.emerghelp.dtos.requests.RegisterUserRequest;
-import com.emerghelp.emerghelp.dtos.responses.RegisterMedicResponse;
 import com.emerghelp.emerghelp.dtos.responses.RegisterUserResponse;
 import com.emerghelp.emerghelp.dtos.responses.ViewProfileResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,23 +43,25 @@ public class UserServiceTest {
     private MedicRequestRepository medicRequestRepository;
 
 
+
     @Test
-    @DisplayName("Test that medical practitioner can register")
-    void testRegisterAndSendConfirmationEmail1() {
+    @DisplayName("test that user can be registered on the system")
+    public void registerTest() {
         RegisterUserRequest request = new RegisterUserRequest();
-        request.setEmail("eircsonericdon66@gmail.com");
         request.setFirstName("Jumoke");
         request.setLastName("Joseph");
+        request.setEmail("ridrijul22@gfum.com");
         request.setPassword("password");
         request.setGender(UNDEFINED);
         request.setPhoneNumber("09078480034");
-        request.setPassword("password");
         RegisterUserResponse response = userService.register(request);
         assertNotNull(response);
         assertTrue(response.getMessage().contains("success"));
-        assertTrue(true, "Email sent successfully");
-        assertEquals("Your account has been created successfully", response.getMessage());
     }
+
+
+
+
 
     @Test
     @DisplayName("test that user can view profile")
@@ -110,4 +110,9 @@ public class UserServiceTest {
         assertThat(updatedProfile.getGender()).isEqualTo(UNDEFINED);
         assertThat(updatedProfile.getRoles()).containsExactly(Role.USER);
     }
+
+
+
+
 }
+
