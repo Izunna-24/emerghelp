@@ -7,8 +7,9 @@ import lombok.Setter;
 @Getter
 public class RegisterUserResponse {
     private Long id;
+
     private String email;
     private String username;
     private String message;
-    }
+}
 

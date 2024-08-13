@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<?> handleBadCredentialsException(BadCredentialsException exception){
         return ResponseEntity.status(BAD_REQUEST)
-                .body(Map.of("Error",exception.getMessage(),"success",false));
+                .body(Map.of("error",exception.getMessage(),"success",false));
     }
 }
 

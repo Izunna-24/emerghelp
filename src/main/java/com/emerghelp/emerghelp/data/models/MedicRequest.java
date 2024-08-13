@@ -21,7 +21,7 @@ import static java.time.LocalDateTime.now;
 @Setter
 @Getter
 @Table(name = "request")
-public class Request {
+public class MedicRequest {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
@@ -48,4 +48,6 @@ public class Request {
     private void setRequestTime(){
         requestTime = now();
     }
+
+
 }
