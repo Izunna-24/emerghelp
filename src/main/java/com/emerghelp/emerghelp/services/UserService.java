@@ -10,8 +10,6 @@ public interface UserService {
 RegisterUserResponse register(RegisterUserRequest registerUserRequest);
 User getById(Long id);
 
-User saveUser(User user);
-
 Boolean verifyToken(String token);
 User getUserByEmail(String username);
 

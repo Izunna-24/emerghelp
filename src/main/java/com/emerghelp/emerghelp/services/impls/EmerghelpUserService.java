@@ -56,7 +56,7 @@ public class EmerghelpUserService implements UserService {
     @Override
     public RegisterUserResponse register(RegisterUserRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new EmailAlreadyExistException("Email already exists");
+            throw new EmailAlreadyExistException("Email already exists, consider logging in instead");
         }
         User user = modelMapper.map(request, User.class);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -101,20 +101,7 @@ public class EmerghelpUserService implements UserService {
                 .orElseThrow(() -> new UserNotFoundException(String.format("user with id %d not found", id)));
     }
 
-    @Override
-    public User saveUser(User user) {
-        if (userRepository.existsByEmail(user.getEmail())) {
-            throw new EmailAlreadyExistException("Email already exists, consider logging in instead");
-        }
-
-        user.setEnabled(false);
-        userRepository.save(user);
-        Confirmation confirmation = new Confirmation(user);
-        confirmationRepository.save(confirmation);
-        emailService.sendHtmlEmail(user.getFirstName(), user.getEmail(), confirmation.getToken());
-        return user;
-    }
-        public User getUserByEmail(String email) {
+       public User getUserByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(String.format("user with email %s not found", email)));
     }

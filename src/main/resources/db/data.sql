@@ -10,4 +10,3 @@ insert into medic(id, email, is_available, photo_url, specialization, license_nu
     (300, 'ridrijulmi@gufum.com', true, 'photo', 'doctor', '400'),
     (301, 'jostuyurzo@gufum.com', true, 'photo', 'nurse', '401');
 
-
