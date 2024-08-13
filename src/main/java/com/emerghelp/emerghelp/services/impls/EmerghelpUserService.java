@@ -55,7 +55,7 @@ public class EmerghelpUserService implements UserService {
 
     @Override
     public RegisterUserResponse register(RegisterUserRequest request) {
-        if (userRepository.existsByEmail(request.getEmail())) {
+        if (userRepository.existsByEmail(request.getEmail().toLowerCase().strip())) {
             throw new EmailAlreadyExistException("Email already exists, consider logging in instead");
         }
         User user = modelMapper.map(request, User.class);
@@ -79,7 +79,7 @@ public class EmerghelpUserService implements UserService {
             if (confirmation == null) {
                 return Boolean.FALSE;
             }
-            User user = confirmation.getUser();
+            User user = userRepository.findByEmailIgnoreCase(confirmation.getUser().getEmail());
             if (user == null) {
                 return Boolean.FALSE;
             }

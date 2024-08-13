@@ -1,4 +1,4 @@
-package com.emerghelp.emerghelp.security.utils;
+package com.emerghelp.emerghelp.Utils;
 
 public class EmailUtils {
 
@@ -8,6 +8,6 @@ public class EmailUtils {
     }
 
     public static String getVerificationUrl(String host, String token) {
-        return host + "/api/users/create-user?token=" + token;
+        return host + "/api/users?token=" + token;
     }
 }

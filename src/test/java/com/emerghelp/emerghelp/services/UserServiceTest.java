@@ -42,8 +42,6 @@ public class UserServiceTest {
     @Autowired
     private MedicRequestRepository medicRequestRepository;
 
-
-
     @Test
     @DisplayName("test that user can be registered on the system")
     public void registerTest() {
@@ -58,11 +56,6 @@ public class UserServiceTest {
         assertNotNull(response);
         assertTrue(response.getMessage().contains("success"));
     }
-
-
-
-
-
     @Test
     @DisplayName("test that user can view profile")
     public void viewProfileTest() {

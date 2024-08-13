@@ -35,8 +35,6 @@ public class UserController {
         );
     }
 
-    //done
-
     @GetMapping
     public ResponseEntity<HttpResponse> confirmUserAccount(@RequestParam("token") String token) {
         Boolean isSuccess = userService.verifyToken(token);

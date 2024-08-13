@@ -13,7 +13,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegisterMedicRequest {
-    private Long id;
     private String firstName;
     private String lastName;
     @JsonProperty("email")
