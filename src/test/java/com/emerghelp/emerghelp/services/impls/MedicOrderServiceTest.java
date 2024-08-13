@@ -99,7 +99,7 @@ public class MedicOrderServiceTest {
         MedicRequestDTO medicRequestDTO = new MedicRequestDTO();
         medicRequestDTO.setUserId(999L);
         assertThrows(UserNotFoundException.class, () -> {
-            medicOrderService.orderMedic(medicRequestDTO);
+            medicOrderService.orderMedic (medicRequestDTO);
         });
     }
 
