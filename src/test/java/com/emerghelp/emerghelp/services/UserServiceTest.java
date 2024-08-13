@@ -48,12 +48,12 @@ public class UserServiceTest {
     @DisplayName("test that user can be registered on the system")
     public void registerTest() {
         RegisterUserRequest request = new RegisterUserRequest();
-        request.setFirstName("Jumoke");
-        request.setLastName("Joseph");
-        request.setEmail("ridrijul22@gfum.com");
+        request.setFirstName("Patrick");
+        request.setLastName("Benjamin");
+        request.setEmail("Ike20743@gmail.com");
         request.setPassword("password");
         request.setGender(UNDEFINED);
-        request.setPhoneNumber("09078480034");
+        request.setPhoneNumber("09078480056");
         RegisterUserResponse response = userService.register(request);
         assertNotNull(response);
         assertTrue(response.getMessage().contains("success"));
