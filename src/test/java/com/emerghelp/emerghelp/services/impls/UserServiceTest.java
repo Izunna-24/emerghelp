@@ -2,7 +2,7 @@ package com.emerghelp.emerghelp.services.impls;
 
 import com.emerghelp.emerghelp.data.constants.Role;
 import com.emerghelp.emerghelp.data.models.User;
-import com.emerghelp.emerghelp.data.repositories.MedicRequestRepository;
+import com.emerghelp.emerghelp.data.repositories.OrderMedicRepository;
 import com.emerghelp.emerghelp.data.repositories.UserRepository;
 import com.emerghelp.emerghelp.dtos.requests.RegisterUserRequest;
 import com.emerghelp.emerghelp.dtos.responses.RegisterUserResponse;
@@ -41,7 +41,7 @@ public class UserServiceTest {
     private UserRepository userRepository;
 
     @Autowired
-    private MedicRequestRepository medicRequestRepository;
+    private OrderMedicRepository orderMedicRepository;
 
     @Test
     @DisplayName("test that user can be registered on the system")
