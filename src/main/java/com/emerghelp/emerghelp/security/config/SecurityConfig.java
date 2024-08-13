@@ -10,8 +10,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -38,18 +36,17 @@ public class SecurityConfig {
                 .addFilterBefore(authorizationFilter, CustomUsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(c->
                         c.requestMatchers(POST,"/api/v1/auth").permitAll()
+                                .requestMatchers("/api/users/create-user").permitAll()
                                 .requestMatchers("/api/v1/request").hasAnyAuthority("USER")
                                 .anyRequest().authenticated()
                 )
                 .build();
     }
-
     @Bean
     public CorsFilter corsFilter() {
         CorsConfigurationSource source = corsConfigurationSource();
         return new CorsFilter(source);
     }
-
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

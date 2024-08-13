@@ -52,7 +52,6 @@ public class CustomUsernamePasswordAuthenticationFilter
         }
     }
 
-
     @Override
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,

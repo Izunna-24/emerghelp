@@ -1,7 +1,8 @@
 package com.emerghelp.emerghelp.controllers;
 
-import com.emerghelp.emerghelp.data.models.User;
+import com.emerghelp.emerghelp.dtos.requests.RegisterUserRequest;
 import com.emerghelp.emerghelp.dtos.responses.HttpResponse;
+import com.emerghelp.emerghelp.dtos.responses.RegisterUserResponse;
 import com.emerghelp.emerghelp.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,15 +15,15 @@ import java.util.Map;
 
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/users/create-user")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<HttpResponse> createUser(@RequestBody User user) {
-        User newUser = userService.saveUser(user);
+    public ResponseEntity<HttpResponse> createUser(@RequestBody RegisterUserRequest request) {
+        RegisterUserResponse newUser = userService.register(request);
         return ResponseEntity.created(URI.create("")).body(
                 HttpResponse.builder()
                         .timeStamp(LocalDateTime.now().toString())
