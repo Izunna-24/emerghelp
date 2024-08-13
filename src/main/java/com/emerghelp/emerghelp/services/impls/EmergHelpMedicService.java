@@ -54,11 +54,14 @@ public class EmergHelpMedicService implements MedicService {
 
     @Override
     public RegisterMedicResponse register(RegisterMedicRequest request) {
-        if (userRepository.existsByEmail(request.getEmail())) {
+        if (medicRepository.existsByEmail(request.getEmail().toLowerCase().strip())) {
             throw new EmailAlreadyExistException("Email already exists");
         }
+        if (medicRepository.existsByLicenseNumber(request.getLicenseNumber().strip())) {
+            throw new LicenseNumberAlreadyExistException("License Number already exists");
+        }
         Medic medic = modelMapper.map(request, Medic.class);
-        medic.setPassword(passwordEncoder.encode(request.getPassword()));
+        medic.setPassword(passwordEncoder.encode(request.getPassword().strip()));
         medic.setRoles(new HashSet<>());
         medic.getRoles().add(MEDIC);
         medic.setIsEnabled(false);
@@ -66,6 +69,7 @@ public class EmergHelpMedicService implements MedicService {
         Confirmation confirmation = new Confirmation(savedMedic);
         emailService.sendHtmlEmail(savedMedic.getFirstName(), savedMedic.getEmail(), confirmation.getToken());
         RegisterMedicResponse response = modelMapper.map(savedMedic, RegisterMedicResponse.class);
+
         response.setMessage("Your account has been created successfully");
         return response;
     }
@@ -77,7 +81,7 @@ public class EmergHelpMedicService implements MedicService {
             if (confirmation == null) {
                 return Boolean.FALSE;
             }
-            Medic medic = confirmation.getMedic();
+            Medic medic = medicRepository.findByEmailIgnoreCase(confirmation.getMedic().getEmail());
             if (medic == null) {
                 return Boolean.FALSE;
             }
