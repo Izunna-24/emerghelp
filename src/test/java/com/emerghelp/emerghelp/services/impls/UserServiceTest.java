@@ -1,4 +1,4 @@
-package com.emerghelp.emerghelp.services;
+package com.emerghelp.emerghelp.services.impls;
 
 import com.emerghelp.emerghelp.data.constants.Role;
 import com.emerghelp.emerghelp.data.models.User;
@@ -7,6 +7,7 @@ import com.emerghelp.emerghelp.data.repositories.UserRepository;
 import com.emerghelp.emerghelp.dtos.requests.RegisterUserRequest;
 import com.emerghelp.emerghelp.dtos.responses.RegisterUserResponse;
 import com.emerghelp.emerghelp.dtos.responses.ViewProfileResponse;
+import com.emerghelp.emerghelp.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.TextNode;
 import com.github.fge.jackson.jsonpointer.JsonPointer;
@@ -48,7 +49,7 @@ public class UserServiceTest {
         RegisterUserRequest request = new RegisterUserRequest();
         request.setFirstName("Jumoke");
         request.setLastName("Joseph");
-        request.setEmail("ridrijul22@gfum.com");
+        request.setEmail("izuchukwuijeudo@gmail.com");
         request.setPassword("password");
         request.setGender(UNDEFINED);
         request.setPhoneNumber("09078480034");

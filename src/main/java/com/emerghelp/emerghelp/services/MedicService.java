@@ -11,7 +11,7 @@ import com.github.fge.jsonpatch.JsonPatch;
 
 
 
-public interface MedicalService {
+public interface MedicService {
 
     RegisterMedicResponse register(RegisterMedicRequest request);
 

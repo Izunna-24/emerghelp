@@ -34,5 +34,5 @@ public class Medic {
     private Boolean isAvailable;
     private String longitude;
     private String latitude;
-    private boolean isEnabled;
+    private Boolean isEnabled;
 }
