@@ -17,4 +17,5 @@ public class RegisterMedicResponse {
     private String licenseNumber;
     private String message;
     private Boolean isAvailable;
+
 }
