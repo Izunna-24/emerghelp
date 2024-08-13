@@ -2,7 +2,6 @@ package com.emerghelp.emerghelp.security.filters;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.emerghelp.emerghelp.dtos.requests.LoginRequest;
 import com.emerghelp.emerghelp.dtos.responses.BaseResponse;
 import com.emerghelp.emerghelp.dtos.responses.LoginResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,7 +1,6 @@
 package com.emerghelp.emerghelp.services;
 
 import com.emerghelp.emerghelp.data.models.User;
-import com.emerghelp.emerghelp.dtos.requests.MedicRequest;
 import com.emerghelp.emerghelp.dtos.requests.RegisterUserRequest;
 import com.emerghelp.emerghelp.dtos.responses.MedicRequestResponse;
 import com.emerghelp.emerghelp.dtos.responses.RegisterUserResponse;
