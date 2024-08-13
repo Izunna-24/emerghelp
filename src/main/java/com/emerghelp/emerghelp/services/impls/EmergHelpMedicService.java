@@ -12,7 +12,7 @@ import com.emerghelp.emerghelp.dtos.responses.RegisterMedicResponse;
 import com.emerghelp.emerghelp.dtos.responses.UpdateMedicalResponse;
 import com.emerghelp.emerghelp.exceptions.*;
 import com.emerghelp.emerghelp.services.EmailService;
-import com.emerghelp.emerghelp.services.MedicalService;
+import com.emerghelp.emerghelp.services.MedicService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
@@ -29,7 +29,7 @@ import static com.emerghelp.emerghelp.data.constants.Role.MEDIC;
 
 
 @Service
-public class EmergHelpMedicService implements MedicalService {
+public class EmergHelpMedicService implements MedicService {
 
     private final MedicRepository medicRepository;
     private final ModelMapper modelMapper;
