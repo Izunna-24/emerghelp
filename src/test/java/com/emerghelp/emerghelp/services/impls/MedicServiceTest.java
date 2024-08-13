@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Sql(scripts = {"/db/data.sql"})
-class EmergHelpMedicalServiceTest {
+class MedicServiceTest {
 
     @Autowired
     private MedicalService medicalService;

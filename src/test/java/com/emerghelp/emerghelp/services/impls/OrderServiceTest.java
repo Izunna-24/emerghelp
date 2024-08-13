@@ -1,7 +1,6 @@
-package com.emerghelp.emerghelp.services;
+package com.emerghelp.emerghelp.services.impls;
 
 import com.emerghelp.emerghelp.dtos.responses.OrderMedicHistory;
-import com.emerghelp.emerghelp.services.impls.EmergHelpMedicOrderService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

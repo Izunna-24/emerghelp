@@ -29,7 +29,7 @@ import static com.emerghelp.emerghelp.data.constants.Role.MEDIC;
 
 
 @Service
-public class EmergHelpMedicalService implements MedicalService {
+public class EmergHelpMedicService implements MedicalService {
 
     private final MedicRepository medicRepository;
     private final ModelMapper modelMapper;
@@ -39,11 +39,11 @@ public class EmergHelpMedicalService implements MedicalService {
     private final UserRepository userRepository;
 
     @Autowired
-    public EmergHelpMedicalService(MedicRepository medicalServiceRepository,
-                                   ModelMapper modelMapper,
-                                   PasswordEncoder passwordEncoder,
-                                   ConfirmationRepository confirmationRepository,
-                                   EmailService emailService, UserRepository userRepository) {
+    public EmergHelpMedicService(MedicRepository medicalServiceRepository,
+                                 ModelMapper modelMapper,
+                                 PasswordEncoder passwordEncoder,
+                                 ConfirmationRepository confirmationRepository,
+                                 EmailService emailService, UserRepository userRepository) {
         this.medicRepository = medicalServiceRepository;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
@@ -61,7 +61,7 @@ public class EmergHelpMedicalService implements MedicalService {
         medic.setPassword(passwordEncoder.encode(request.getPassword()));
         medic.setRoles(new HashSet<>());
         medic.getRoles().add(MEDIC);
-        medic.setEnabled(false);
+        medic.setIsEnabled(false);
         Medic savedMedic = medicRepository.save(medic);
         Confirmation confirmation = new Confirmation(savedMedic);
         emailService.sendHtmlEmail(savedMedic.getFirstName(), savedMedic.getEmail(), confirmation.getToken());
@@ -81,7 +81,7 @@ public class EmergHelpMedicalService implements MedicalService {
             if (medic == null) {
                 return Boolean.FALSE;
             }
-            medic.setEnabled(true);
+            medic.setIsEnabled(true);
             medicRepository.save(medic);
             return Boolean.TRUE;
         } catch (DataAccessException e) {
