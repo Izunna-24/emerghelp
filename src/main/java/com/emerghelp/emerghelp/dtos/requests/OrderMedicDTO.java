@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MedicRequestDTO {
+public class OrderMedicDTO {
    private Long userId;
    private Long medicId;
    private String longitude;
