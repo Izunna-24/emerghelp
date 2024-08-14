@@ -51,14 +51,17 @@ public class EmergHelpMedicOrderService implements MedicOrderService {
         User user = userRepository.findById(orderMedicDTO.getUserId())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         OrderMedic orderMedic = buildMedicRequest(orderMedicDTO, user);
-        orderMedicRepository.save(orderMedic);
+        OrderMedic savedMedic = orderMedicRepository.save(orderMedic);
+
         List<Medic> allMedic = medicRepository.findAll();
+
         List<Medic> availableMedic = allMedic.stream()
                 .filter(medic -> calculateDistance(medic, orderMedic) < 30)
                 .toList();
 
         OrderMedicResponse medicRequestResponse = new OrderMedicResponse();
         medicRequestResponse.setAvailableMedic(availableMedic);
+        medicRequestResponse.setId(savedMedic.getId());
         return  medicRequestResponse;
     }
     @Override
@@ -69,25 +72,23 @@ public class EmergHelpMedicOrderService implements MedicOrderService {
 
     @Override
     public AcceptOrderMedicResponse acceptOrder(AcceptOrderMedicDTO acceptOrderMedic) {
-        OrderMedic orderMedic = validateOrderAndMedic(acceptOrderMedic);
-        if (calculateDistance(orderMedic.getAssignedMedic(), orderMedic) >= 30)
-            throw new MedicTooFarException("Medic too far to accept this order");
-        orderMedic.setOrderMedicStatus(ACCEPTED);
-        orderMedicRepository.save(orderMedic);
-        AcceptOrderMedicResponse response = new AcceptOrderMedicResponse();
-        response.setOrderId(orderMedic.getId());
-        response.setMedicId(orderMedic.getId());
-        response.setStatus(ACCEPTED);
-        return response;
-    }
-
-    private OrderMedic validateOrderAndMedic(AcceptOrderMedicDTO acceptOrderMedic) {
         OrderMedic orderMedic = orderMedicRepository.findById(acceptOrderMedic.getOrderId())
                 .orElseThrow(() -> new OrderMedicNotFoundException("Order not found"));
         Medic medic = medicRepository.findById(acceptOrderMedic.getMedicId())
                 .orElseThrow(() -> new MedicNotFoundException("Medic not found"));
+
+        if (calculateDistance(medic, orderMedic) >= 30)
+            throw new MedicTooFarException("Medic too far to accept this order");
+
         orderMedic.setAssignedMedic(medic);
-        return orderMedic;
+        orderMedic.setOrderMedicStatus(ACCEPTED);
+        orderMedicRepository.save(orderMedic);
+
+        AcceptOrderMedicResponse response = modelMapper.map(orderMedic, AcceptOrderMedicResponse.class);
+        response.setOrderId(orderMedic.getId());
+        response.setMedicId(medic.getId());
+        response.setStatus(ACCEPTED);
+        return response;
     }
 
 
@@ -105,13 +106,13 @@ public class EmergHelpMedicOrderService implements MedicOrderService {
         orderMedic.setUser(user);
         orderMedic.setDescription(orderMedicDTO.getDescription());
         orderMedic.setOrderMedicStatus(PENDING);
-        orderMedic.setLatitude(Double.parseDouble(orderMedicDTO.getLatitude()));
-        orderMedic.setLongitude(Double.parseDouble(orderMedicDTO.getLongitude()));
+        orderMedic.setLatitude(orderMedicDTO.getLatitude());
+        orderMedic.setLongitude(orderMedicDTO.getLongitude());
         return orderMedic;
     }
     private Double calculateDistance(Medic medic, OrderMedic orderMedic) {
-        double lat1 = Math.toRadians(Double.parseDouble(medic.getLatitude()));
-        double lon1 = Math.toRadians(Double.parseDouble(medic.getLongitude()));
+        double lat1 = Math.toRadians(medic.getLatitude());
+        double lon1 = Math.toRadians(medic.getLongitude());
         double lat2 = Math.toRadians(orderMedic.getLatitude());
         double lon2 = Math.toRadians(orderMedic.getLongitude());
         double latDiff = lat2 - lat1;

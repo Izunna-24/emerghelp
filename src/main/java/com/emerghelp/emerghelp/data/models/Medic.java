@@ -33,7 +33,7 @@ public class Medic {
     @Column(nullable = false,unique = true)
     private String licenseNumber;
     private Boolean isAvailable;
-    private String longitude;
-    private String latitude;
+    private double longitude;
+    private double latitude;
     private Boolean isEnabled;
 }
