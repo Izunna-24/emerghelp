@@ -7,7 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AcceptOrderMedicResponse {
+
     private Long orderId;
     private Long medicId;
     private OrderMedicStatus status;
+
 }

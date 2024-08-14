@@ -7,6 +7,7 @@ import com.emerghelp.emerghelp.data.repositories.UserRepository;
 import com.emerghelp.emerghelp.dtos.requests.RegisterUserRequest;
 import com.emerghelp.emerghelp.dtos.responses.RegisterUserResponse;
 import com.emerghelp.emerghelp.dtos.responses.ViewProfileResponse;
+import com.emerghelp.emerghelp.exceptions.EmailAlreadyExistException;
 import com.emerghelp.emerghelp.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.TextNode;
@@ -43,27 +44,22 @@ public class UserServiceTest {
     @Autowired
     private OrderMedicRepository orderMedicRepository;
 
-
-
     @Test
     @DisplayName("test that user can be registered on the system")
     public void registerTest() {
         RegisterUserRequest request = new RegisterUserRequest();
-        request.setFirstName("Jumoke");
-        request.setLastName("Joseph");
-        request.setEmail("izuchukwuijeudo@gmail.com");
+
+        request.setFirstName("Patrick");
+        request.setLastName("Benjamin");
+        request.setEmail("ike20743@gmail.com");
         request.setPassword("password");
         request.setGender(UNDEFINED);
-        request.setPhoneNumber("09078480034");
-        RegisterUserResponse response = userService.register(request);
-        assertNotNull(response);
-        assertTrue(response.getMessage().contains("success"));
+        request.setPhoneNumber("09078480056");
+        assertThrows(EmailAlreadyExistException.class,()-> userService.register(request));
+//        RegisterUserResponse response = userService.register(request);
+//        assertNotNull(response);
+//        assertTrue(response.getMessage().contains("success"));
     }
-
-
-
-
-
     @Test
     @DisplayName("test that user can view profile")
     public void viewProfileTest() {

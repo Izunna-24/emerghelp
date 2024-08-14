@@ -11,7 +11,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginRequest {
-
         @JsonProperty("email")
         @Email(regexp="^(?=[a-zA-Z])[a-zA-Z]+([0-9])([_+!`])+@(?=[a-zA-Z])([a-zA-Z]+)([0-9])([a-zA-Z0-9._!~+-])+\\.[a-zA-Z]{2,}$")
         private String email;

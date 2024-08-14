@@ -8,6 +8,7 @@ import com.emerghelp.emerghelp.data.repositories.OrderMedicRepository;
 import com.emerghelp.emerghelp.data.repositories.UserRepository;
 import com.emerghelp.emerghelp.dtos.requests.AcceptOrderMedicDTO;
 import com.emerghelp.emerghelp.dtos.requests.OrderMedicDTO;
+
 import com.emerghelp.emerghelp.dtos.responses.AcceptOrderMedicResponse;
 import com.emerghelp.emerghelp.dtos.responses.OrderMedicResponse;
 import com.emerghelp.emerghelp.dtos.responses.OrderMedicHistory;
@@ -55,9 +56,10 @@ public class EmergHelpMedicOrderService implements MedicOrderService {
         List<Medic> availableMedic = allMedic.stream()
                 .filter(medic -> calculateDistance(medic, orderMedic) < 30)
                 .toList();
-        OrderMedicResponse orderMedicResponse = new OrderMedicResponse();
-        orderMedicResponse.setAvailableMedic(availableMedic);
-        return orderMedicResponse;
+
+        OrderMedicResponse medicRequestResponse = new OrderMedicResponse();
+        medicRequestResponse.setAvailableMedic(availableMedic);
+        return  medicRequestResponse;
     }
     @Override
     public OrderMedic getMedicOrderBy(long id) {

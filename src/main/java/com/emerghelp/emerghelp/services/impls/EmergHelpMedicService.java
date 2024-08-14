@@ -54,11 +54,14 @@ public class EmergHelpMedicService implements MedicService {
 
     @Override
     public RegisterMedicResponse register(RegisterMedicRequest request) {
-        if (userRepository.existsByEmail(request.getEmail())) {
+        if (medicRepository.existsByEmail(request.getEmail().toLowerCase().strip())) {
             throw new EmailAlreadyExistException("Email already exists");
         }
+//        if (medicRepository.existsByLicenseNumber(request.getLicenseNumber().strip())) {
+//            throw new LicenseNumberAlreadyExistException("License Number already exists");
+//        }
         Medic medic = modelMapper.map(request, Medic.class);
-        medic.setPassword(passwordEncoder.encode(request.getPassword()));
+        medic.setPassword(passwordEncoder.encode(request.getPassword().strip()));
         medic.setRoles(new HashSet<>());
         medic.getRoles().add(MEDIC);
         medic.setIsEnabled(false);

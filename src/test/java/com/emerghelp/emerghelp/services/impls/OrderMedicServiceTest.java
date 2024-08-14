@@ -48,7 +48,13 @@ public class OrderMedicServiceTest {
         Medic medic3 = createMedic(6.5166646,  3.38499846, "234"); // Unilag
         medicRepository.saveAll(Arrays.asList(medic1, medic2, medic3));
         OrderMedicDTO orderMedicDTO = getMedicRequest(user, medic1, "homicide");
+<<<<<<< HEAD:src/test/java/com/emerghelp/emerghelp/services/impls/OrderMedicServiceTest.java
         OrderMedicResponse response = medicOrderService.orderMedic(orderMedicDTO);
+=======
+
+        OrderMedicResponse response = medicOrderService.orderMedic(orderMedicDTO);
+
+>>>>>>> 8d8b999620dca9ea245555eb4d7738059c93132b:src/test/java/com/emerghelp/emerghelp/services/impls/MedicOrderServiceTest.java
         assertNotNull(response);
         assertEquals(3, response.getAvailableMedic().size());
         assertEquals(medic3.getId(), response.getAvailableMedic().get(2).getId());

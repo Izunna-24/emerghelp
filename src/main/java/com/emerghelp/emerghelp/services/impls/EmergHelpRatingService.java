@@ -66,6 +66,7 @@ public class EmergHelpRatingService implements RatingService {
 
 
 
+
     @Override
     public List<Rating> getRatingsForMedic(Long medicId) {
         return ratingRepository.findByMedicRatedId(medicId);
