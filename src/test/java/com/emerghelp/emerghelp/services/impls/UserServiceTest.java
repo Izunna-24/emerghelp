@@ -55,10 +55,9 @@ public class UserServiceTest {
         request.setPassword("password");
         request.setGender(UNDEFINED);
         request.setPhoneNumber("09078480056");
-        assertThrows(EmailAlreadyExistException.class,()-> userService.register(request));
-//        RegisterUserResponse response = userService.register(request);
-//        assertNotNull(response);
-//        assertTrue(response.getMessage().contains("success"));
+        RegisterUserResponse response = userService.register(request);
+        assertNotNull(response);
+        assertTrue(response.getMessage().contains("success"));
     }
     @Test
     @DisplayName("test that user can view profile")
