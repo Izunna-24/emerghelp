@@ -1,7 +1,7 @@
 package com.emerghelp.emerghelp.data.models;
 
 
-import com.emerghelp.emerghelp.data.constants.RequestStatus;
+import com.emerghelp.emerghelp.data.constants.OrderMedicStatus;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -20,8 +20,8 @@ import static java.time.LocalDateTime.now;
 @Entity
 @Setter
 @Getter
-@Table(name = "request")
-public class MedicRequest {
+@Table(name = "order_medic")
+public class OrderMedic {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
@@ -35,10 +35,10 @@ public class MedicRequest {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime requestTime;
     @Enumerated(value = STRING)
-    private RequestStatus requestStatus;
+    private OrderMedicStatus orderMedicStatus;
     @ManyToOne
     @JoinColumn(name = "medic_id")
-    private Medic medic;
+    private Medic assignedMedic;
     @OneToOne
     private MedicalReport medicalReport;
     private double latitude;

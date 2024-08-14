@@ -14,8 +14,8 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<?> handlerUserNotFound(UserNotFoundException exception){
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handlerUserNotFound(Exception exception){
         return ResponseEntity.status(BAD_REQUEST)
                 .body(Map.of("error",exception.getMessage(),"success",false));
     }
