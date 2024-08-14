@@ -19,7 +19,7 @@ public interface MedicService {
 
     AcceptOrderMedicResponse acceptOrderMedic(AcceptOrderMedicDTO request);
 
-    Medic getMedicalPractionerById(long id);
+    Medic getMedicById(long id);
 
     UpdateMedicalResponse updateMedicalPractitioner(Long medicalPractitionerId, JsonPatch jsonPatch);
 }

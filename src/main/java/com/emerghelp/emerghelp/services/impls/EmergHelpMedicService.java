@@ -102,14 +102,14 @@ public class EmergHelpMedicService implements MedicService {
     }
 
     @Override
-    public Medic getMedicalPractionerById(long id) {
+    public Medic getMedicById(long id) {
         return medicRepository.findById(id)
                 .orElseThrow(()->new MedicalPractionerNotFoundException(String.format("medical practitioner with this id %d not found", id)));
     }
     @Override
     public UpdateMedicalResponse updateMedicalPractitioner(Long medicalId, JsonPatch jsonPatch) {
         try {
-            Medic medicalPractitioner = getMedicalPractionerById(medicalId);
+            Medic medicalPractitioner = getMedicById(medicalId);
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode practitionerNode = objectMapper.convertValue(medicalPractitioner, JsonNode.class);
             practitionerNode = jsonPatch.apply(practitionerNode);
