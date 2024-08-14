@@ -25,7 +25,6 @@ class MedicServiceTest {
         request.setEmail("eircsonericdon66@gmail.com");
         request.setLicenseNumber("123");
         request.setPassword("password");
-        request.setId(300L);
         RegisterMedicResponse response = medicService.register(request);
         assertTrue(response.getMessage().contains("Email sent successfully"));
         assertTrue(true, "Email sent successfully");
@@ -39,7 +38,6 @@ class MedicServiceTest {
             request.setFirstName("Ikechukwu");
             request.setLicenseNumber("123");
             request.setPassword("password");
-            request.setId(300L);
             RegisterMedicResponse response1 = medicService.register(request);
             assertTrue(true, "Email sent successfully");
             assertEquals("Your account has been created successfully", response1.getMessage());

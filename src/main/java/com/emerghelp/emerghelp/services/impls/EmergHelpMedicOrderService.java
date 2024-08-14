@@ -6,9 +6,13 @@ import com.emerghelp.emerghelp.data.models.User;
 import com.emerghelp.emerghelp.data.repositories.MedicRepository;
 import com.emerghelp.emerghelp.data.repositories.OrderMedicRepository;
 import com.emerghelp.emerghelp.data.repositories.UserRepository;
+import com.emerghelp.emerghelp.dtos.requests.AcceptOrderMedicDTO;
 import com.emerghelp.emerghelp.dtos.requests.OrderMedicDTO;
-import com.emerghelp.emerghelp.dtos.responses.MedicRequestResponse;
+import com.emerghelp.emerghelp.dtos.responses.AcceptOrderMedicResponse;
+import com.emerghelp.emerghelp.dtos.responses.OrderMedicResponse;
 import com.emerghelp.emerghelp.dtos.responses.OrderMedicHistory;
+import com.emerghelp.emerghelp.exceptions.MedicNotFoundException;
+import com.emerghelp.emerghelp.exceptions.MedicTooFarException;
 import com.emerghelp.emerghelp.exceptions.OrderMedicNotFoundException;
 import com.emerghelp.emerghelp.exceptions.UserNotFoundException;
 import com.emerghelp.emerghelp.services.MedicOrderService;
@@ -20,7 +24,8 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.emerghelp.emerghelp.Utils.LocationUtils.EARTH_RADIUS;
-import static com.emerghelp.emerghelp.data.constants.RequestStatus.PENDING;
+import static com.emerghelp.emerghelp.data.constants.OrderMedicStatus.ACCEPTED;
+import static com.emerghelp.emerghelp.data.constants.OrderMedicStatus.PENDING;
 
 @Service
 public class EmergHelpMedicOrderService implements MedicOrderService {
@@ -41,7 +46,7 @@ public class EmergHelpMedicOrderService implements MedicOrderService {
     }
 
     @Override
-    public MedicRequestResponse orderMedic(OrderMedicDTO orderMedicDTO) {
+    public OrderMedicResponse orderMedic(OrderMedicDTO orderMedicDTO) {
         User user = userRepository.findById(orderMedicDTO.getUserId())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         OrderMedic orderMedic = buildMedicRequest(orderMedicDTO, user);
@@ -50,15 +55,41 @@ public class EmergHelpMedicOrderService implements MedicOrderService {
         List<Medic> availableMedic = allMedic.stream()
                 .filter(medic -> calculateDistance(medic, orderMedic) < 30)
                 .toList();
-        MedicRequestResponse medicRequestResponse = new MedicRequestResponse();
-        medicRequestResponse.setAvailableMedic(availableMedic);
-        return  medicRequestResponse;
+        OrderMedicResponse orderMedicResponse = new OrderMedicResponse();
+        orderMedicResponse.setAvailableMedic(availableMedic);
+        return orderMedicResponse;
     }
     @Override
     public OrderMedic getMedicOrderBy(long id) {
         return orderMedicRepository.findById(id)
                 .orElseThrow(()-> new OrderMedicNotFoundException("No order found"));
     }
+
+    @Override
+    public AcceptOrderMedicResponse acceptOrder(AcceptOrderMedicDTO acceptOrderMedic) {
+        OrderMedic orderMedic = validateOrderAndMedic(acceptOrderMedic);
+        if (calculateDistance(orderMedic.getAssignedMedic(), orderMedic) >= 30)
+            throw new MedicTooFarException("Medic too far to accept this order");
+        orderMedic.setOrderMedicStatus(ACCEPTED);
+        orderMedicRepository.save(orderMedic);
+        AcceptOrderMedicResponse response = new AcceptOrderMedicResponse();
+        response.setOrderId(orderMedic.getId());
+        response.setMedicId(orderMedic.getId());
+        response.setStatus(ACCEPTED);
+        return response;
+    }
+
+    private OrderMedic validateOrderAndMedic(AcceptOrderMedicDTO acceptOrderMedic) {
+        OrderMedic orderMedic = orderMedicRepository.findById(acceptOrderMedic.getOrderId())
+                .orElseThrow(() -> new OrderMedicNotFoundException("Order not found"));
+        Medic medic = medicRepository.findById(acceptOrderMedic.getMedicId())
+                .orElseThrow(() -> new MedicNotFoundException("Medic not found"));
+        orderMedic.setAssignedMedic(medic);
+        return orderMedic;
+    }
+
+
+
     @Override
     public List<OrderMedicHistory> viewAllOrderFor(Long id) {
         List<OrderMedic> orderMedics = orderMedicRepository.findMedicRequestByUserId(id);
@@ -71,7 +102,7 @@ public class EmergHelpMedicOrderService implements MedicOrderService {
         OrderMedic orderMedic = modelMapper.map(orderMedicDTO, OrderMedic.class);
         orderMedic.setUser(user);
         orderMedic.setDescription(orderMedicDTO.getDescription());
-        orderMedic.setRequestStatus(PENDING);
+        orderMedic.setOrderMedicStatus(PENDING);
         orderMedic.setLatitude(Double.parseDouble(orderMedicDTO.getLatitude()));
         orderMedic.setLongitude(Double.parseDouble(orderMedicDTO.getLongitude()));
         return orderMedic;
@@ -89,4 +120,6 @@ public class EmergHelpMedicOrderService implements MedicOrderService {
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return EARTH_RADIUS * c;
     }
+
+
 }

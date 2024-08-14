@@ -1,13 +1,12 @@
 package com.emerghelp.emerghelp.services.impls;
 
 import com.emerghelp.emerghelp.data.models.Medic;
-import com.emerghelp.emerghelp.data.models.OrderMedic;
 import com.emerghelp.emerghelp.data.models.User;
 import com.emerghelp.emerghelp.data.repositories.OrderMedicRepository;
 import com.emerghelp.emerghelp.data.repositories.MedicRepository;
 import com.emerghelp.emerghelp.data.repositories.UserRepository;
 import com.emerghelp.emerghelp.dtos.requests.OrderMedicDTO;
-import com.emerghelp.emerghelp.dtos.responses.MedicRequestResponse;
+import com.emerghelp.emerghelp.dtos.responses.OrderMedicResponse;
 import com.emerghelp.emerghelp.dtos.responses.OrderMedicHistory;
 import com.emerghelp.emerghelp.exceptions.UserNotFoundException;
 import com.emerghelp.emerghelp.services.MedicOrderService;
@@ -24,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-public class MedicOrderServiceTest {
+public class OrderMedicServiceTest {
     @Autowired
     private MedicOrderService medicOrderService;
     @Autowired
@@ -33,8 +32,6 @@ public class MedicOrderServiceTest {
     private MedicRepository medicRepository;
     @Autowired
     private OrderMedicRepository orderMedicRepository;
-    @Autowired
-    private ModelMapper modelMapper;
 
 
     @BeforeEach
@@ -50,12 +47,8 @@ public class MedicOrderServiceTest {
         Medic medic2 = createMedic(6.59651000, 3.34205000, "65"); //Ikeja
         Medic medic3 = createMedic(6.5166646,  3.38499846, "234"); // Unilag
         medicRepository.saveAll(Arrays.asList(medic1, medic2, medic3));
-
-
         OrderMedicDTO orderMedicDTO = getMedicRequest(user, medic1, "homicide");
-
-        MedicRequestResponse response = medicOrderService.orderMedic(orderMedicDTO);
-
+        OrderMedicResponse response = medicOrderService.orderMedic(orderMedicDTO);
         assertNotNull(response);
         assertEquals(3, response.getAvailableMedic().size());
         assertEquals(medic3.getId(), response.getAvailableMedic().get(2).getId());
@@ -82,7 +75,7 @@ public class MedicOrderServiceTest {
 
         OrderMedicDTO orderMedicDTO = getMedicRequest(user, medic1, "suicide attempt");
 
-        MedicRequestResponse response = medicOrderService.orderMedic(orderMedicDTO);
+        OrderMedicResponse response = medicOrderService.orderMedic(orderMedicDTO);
         assertNotNull(response);
         assertTrue(response.getAvailableMedic().isEmpty());
     }
@@ -136,7 +129,7 @@ public class MedicOrderServiceTest {
         }
 
         @Test
-        public void testViewAllOrderFor_MultipleMedicRequests() {
+        public void testViewAllOrderFor_multipleMedicRequests() {
             User user = getUser();
             Medic medic1 = createMedic(80.0, 80.0,"99");
             Medic medic2 = createMedic(80.0, 80.0,"99");
