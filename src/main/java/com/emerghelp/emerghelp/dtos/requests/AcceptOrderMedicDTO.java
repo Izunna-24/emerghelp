@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class AcceptOrderRequest {
+public class AcceptOrderMedicDTO {
     private Long id;
     private User user;
     private String photoUrl;

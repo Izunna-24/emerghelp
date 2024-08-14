@@ -16,6 +16,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Setter
 @Getter
 @Table(name = "medic")
+@ToString
 public class Medic {
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -34,5 +35,5 @@ public class Medic {
     private Boolean isAvailable;
     private String longitude;
     private String latitude;
-    private boolean isEnabled;
+    private Boolean isEnabled;
 }

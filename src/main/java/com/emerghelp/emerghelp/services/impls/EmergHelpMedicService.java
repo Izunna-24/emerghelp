@@ -5,14 +5,14 @@ import com.emerghelp.emerghelp.data.models.Medic;
 import com.emerghelp.emerghelp.data.repositories.ConfirmationRepository;
 import com.emerghelp.emerghelp.data.repositories.MedicRepository;
 import com.emerghelp.emerghelp.data.repositories.UserRepository;
-import com.emerghelp.emerghelp.dtos.requests.AcceptOrderRequest;
+import com.emerghelp.emerghelp.dtos.requests.AcceptOrderMedicDTO;
 import com.emerghelp.emerghelp.dtos.requests.RegisterMedicRequest;
-import com.emerghelp.emerghelp.dtos.responses.AcceptOrderResponse;
+import com.emerghelp.emerghelp.dtos.responses.AcceptOrderMedicResponse;
 import com.emerghelp.emerghelp.dtos.responses.RegisterMedicResponse;
 import com.emerghelp.emerghelp.dtos.responses.UpdateMedicalResponse;
 import com.emerghelp.emerghelp.exceptions.*;
 import com.emerghelp.emerghelp.services.EmailService;
-import com.emerghelp.emerghelp.services.MedicalService;
+import com.emerghelp.emerghelp.services.MedicService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
@@ -29,7 +29,7 @@ import static com.emerghelp.emerghelp.data.constants.Role.MEDIC;
 
 
 @Service
-public class EmergHelpMedicalService implements MedicalService {
+public class EmergHelpMedicService implements MedicService {
 
     private final MedicRepository medicRepository;
     private final ModelMapper modelMapper;
@@ -39,11 +39,11 @@ public class EmergHelpMedicalService implements MedicalService {
     private final UserRepository userRepository;
 
     @Autowired
-    public EmergHelpMedicalService(MedicRepository medicalServiceRepository,
-                                   ModelMapper modelMapper,
-                                   PasswordEncoder passwordEncoder,
-                                   ConfirmationRepository confirmationRepository,
-                                   EmailService emailService, UserRepository userRepository) {
+    public EmergHelpMedicService(MedicRepository medicalServiceRepository,
+                                 ModelMapper modelMapper,
+                                 PasswordEncoder passwordEncoder,
+                                 ConfirmationRepository confirmationRepository,
+                                 EmailService emailService, UserRepository userRepository) {
         this.medicRepository = medicalServiceRepository;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
@@ -54,14 +54,17 @@ public class EmergHelpMedicalService implements MedicalService {
 
     @Override
     public RegisterMedicResponse register(RegisterMedicRequest request) {
-        if (userRepository.existsByEmail(request.getEmail())) {
+        if (medicRepository.existsByEmail(request.getEmail().toLowerCase().strip())) {
             throw new EmailAlreadyExistException("Email already exists");
         }
+//        if (medicRepository.existsByLicenseNumber(request.getLicenseNumber().strip())) {
+//            throw new LicenseNumberAlreadyExistException("License Number already exists");
+//        }
         Medic medic = modelMapper.map(request, Medic.class);
-        medic.setPassword(passwordEncoder.encode(request.getPassword()));
+        medic.setPassword(passwordEncoder.encode(request.getPassword().strip()));
         medic.setRoles(new HashSet<>());
         medic.getRoles().add(MEDIC);
-        medic.setEnabled(false);
+        medic.setIsEnabled(false);
         Medic savedMedic = medicRepository.save(medic);
         Confirmation confirmation = new Confirmation(savedMedic);
         emailService.sendHtmlEmail(savedMedic.getFirstName(), savedMedic.getEmail(), confirmation.getToken());
@@ -81,7 +84,7 @@ public class EmergHelpMedicalService implements MedicalService {
             if (medic == null) {
                 return Boolean.FALSE;
             }
-            medic.setEnabled(true);
+            medic.setIsEnabled(true);
             medicRepository.save(medic);
             return Boolean.TRUE;
         } catch (DataAccessException e) {
@@ -94,7 +97,7 @@ public class EmergHelpMedicalService implements MedicalService {
     }
 
     @Override
-    public AcceptOrderResponse acceptOrderMedic(AcceptOrderRequest request) {
+    public AcceptOrderMedicResponse acceptOrderMedic(AcceptOrderMedicDTO request) {
         return null;
     }
 

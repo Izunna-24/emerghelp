@@ -35,7 +35,6 @@ public class AuthenticationControllerTest {
                     .andExpect(status().isOk())
                     .andDo(print());
 
-
         }
         @Test
         public void testThatAuthenticationFailedForIncorrectCredentials() throws Exception {
@@ -52,5 +51,3 @@ public class AuthenticationControllerTest {
         }
 
     }
-
-

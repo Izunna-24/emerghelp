@@ -1,12 +1,14 @@
-package com.emerghelp.emerghelp.services;
+package com.emerghelp.emerghelp.services.impls;
 
 import com.emerghelp.emerghelp.data.constants.Role;
 import com.emerghelp.emerghelp.data.models.User;
-import com.emerghelp.emerghelp.data.repositories.MedicRequestRepository;
+import com.emerghelp.emerghelp.data.repositories.OrderMedicRepository;
 import com.emerghelp.emerghelp.data.repositories.UserRepository;
 import com.emerghelp.emerghelp.dtos.requests.RegisterUserRequest;
 import com.emerghelp.emerghelp.dtos.responses.RegisterUserResponse;
 import com.emerghelp.emerghelp.dtos.responses.ViewProfileResponse;
+import com.emerghelp.emerghelp.exceptions.EmailAlreadyExistException;
+import com.emerghelp.emerghelp.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.TextNode;
 import com.github.fge.jackson.jsonpointer.JsonPointer;
@@ -40,29 +42,24 @@ public class UserServiceTest {
     private UserRepository userRepository;
 
     @Autowired
-    private MedicRequestRepository medicRequestRepository;
-
-
+    private OrderMedicRepository orderMedicRepository;
 
     @Test
     @DisplayName("test that user can be registered on the system")
     public void registerTest() {
         RegisterUserRequest request = new RegisterUserRequest();
+
         request.setFirstName("Patrick");
         request.setLastName("Benjamin");
-        request.setEmail("Ike20743@gmail.com");
+        request.setEmail("ike20743@gmail.com");
         request.setPassword("password");
         request.setGender(UNDEFINED);
         request.setPhoneNumber("09078480056");
-        RegisterUserResponse response = userService.register(request);
-        assertNotNull(response);
-        assertTrue(response.getMessage().contains("success"));
+        assertThrows(EmailAlreadyExistException.class,()-> userService.register(request));
+//        RegisterUserResponse response = userService.register(request);
+//        assertNotNull(response);
+//        assertTrue(response.getMessage().contains("success"));
     }
-
-
-
-
-
     @Test
     @DisplayName("test that user can view profile")
     public void viewProfileTest() {

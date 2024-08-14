@@ -14,7 +14,8 @@ public class RegisterMedicResponse {
     private Gender gender;
     private String photoUrl;
     private String specialization;
-    private String licenseNumber;
     private String message;
     private Boolean isAvailable;
+
+
 }

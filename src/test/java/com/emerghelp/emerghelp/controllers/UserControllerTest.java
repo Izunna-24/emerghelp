@@ -30,36 +30,4 @@ public class UserControllerTest {
     private MockMvc mockMvc;
 
 
-
-
-//    @Test
-//    public void testThatUserProfileCanBeViewed() throws Exception {
-//        long userId = 200L;
-//        try {
-//            mockMvc.perform(MockMvcRequestBuilders.get("/user/view/" + userId )
-//                            .contentType(MediaType.APPLICATION_JSON))
-//                    .andExpect(status().isOk())
-//                    .andDo(print());
-//        }
-//        catch (EmerghelpBaseException e){
-//            e.getMessage();
-//        }
-//    }
-
-
-//    @Test
-//    public void testThatUserProfileCanBeUpdated() throws Exception {
-//        long userId = 200L;
-//        String jsonPatch = "[{\"op\":\"replace\",\"path\":\"/firstName\",\"value\":\"Olajumoke\"}]";
-//
-//        mockMvc.perform(MockMvcRequestBuilders.patch("/user/update/" + userId)
-//                        .contentType(MediaType.valueOf("application/json-patch+json"))
-//                        .content(jsonPatch))
-//                .andExpect(status().is2xxSuccessful())
-//                .andExpect((ResultMatcher) jsonPath("$.firstName").value("Olajumoke"))
-//                .andDo(print());
-//    }
-
-
-
 }

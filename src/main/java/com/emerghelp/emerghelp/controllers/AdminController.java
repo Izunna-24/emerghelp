@@ -42,7 +42,7 @@ public class AdminController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (EmerghelpBaseException exception) {
             DeactivateUserResponse response = new DeactivateUserResponse();
-            response.setMessage("User account has been deactivated");
+            response.setMessage("Your account is disabled");
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
@@ -53,7 +53,7 @@ public class AdminController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (EmerghelpBaseException exception) {
             ActivateUserResponse response = new ActivateUserResponse();
-            response.setMessage("User account has been activated");
+            response.setMessage("Your account is enabled");
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
     }

@@ -3,7 +3,7 @@ package com.emerghelp.emerghelp.services.impls;
 import com.emerghelp.emerghelp.data.models.Confirmation;
 import com.emerghelp.emerghelp.data.models.User;
 import com.emerghelp.emerghelp.data.repositories.ConfirmationRepository;
-import com.emerghelp.emerghelp.data.repositories.MedicRequestRepository;
+import com.emerghelp.emerghelp.data.repositories.OrderMedicRepository;
 import com.emerghelp.emerghelp.data.repositories.UserRepository;
 import com.emerghelp.emerghelp.dtos.requests.RegisterUserRequest;
 import com.emerghelp.emerghelp.dtos.responses.RegisterUserResponse;
@@ -35,7 +35,7 @@ public class EmerghelpUserService implements UserService {
     private final ConfirmationRepository confirmationRepository;
     private final EmailService emailService;
 
-    private final MedicRequestRepository medicRequestRepository;
+    private final OrderMedicRepository orderMedicRepository;
 
 
 
@@ -43,19 +43,19 @@ public class EmerghelpUserService implements UserService {
     public EmerghelpUserService(UserRepository userRepository,
                                 ModelMapper modelMapper,
                                 PasswordEncoder passwordEncoder,
-                                ConfirmationRepository confirmationRepository, EmailService emailService, MedicRequestRepository medicRequestRepository) {
+                                ConfirmationRepository confirmationRepository, EmailService emailService, OrderMedicRepository orderMedicRepository) {
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.confirmationRepository = confirmationRepository;
         this.emailService = emailService;
-        this.medicRequestRepository = medicRequestRepository;
+        this.orderMedicRepository = orderMedicRepository;
 
     }
 
     @Override
     public RegisterUserResponse register(RegisterUserRequest request) {
-        if (userRepository.existsByEmail(request.getEmail())) {
+        if (userRepository.existsByEmail(request.getEmail().toLowerCase().strip())) {
             throw new EmailAlreadyExistException("Email already exists, consider logging in instead");
         }
         User user = modelMapper.map(request, User.class);
@@ -79,7 +79,7 @@ public class EmerghelpUserService implements UserService {
             if (confirmation == null) {
                 return Boolean.FALSE;
             }
-            User user = confirmation.getUser();
+            User user = userRepository.findByEmailIgnoreCase(confirmation.getUser().getEmail());
             if (user == null) {
                 return Boolean.FALSE;
             }
