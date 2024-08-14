@@ -22,7 +22,7 @@ class MedicServiceTest {
     @DisplayName("Test that medical practitioner can register")
     void testRegisterAndSendConfirmationEmail1() {
         RegisterMedicRequest request = new RegisterMedicRequest();
-        request.setEmail("eircsonericdon66@gmail.com");
+        request.setEmail("goodwillizunna@gmail.com");
         request.setLicenseNumber("123");
         request.setPassword("password");
         request.setId(300L);
