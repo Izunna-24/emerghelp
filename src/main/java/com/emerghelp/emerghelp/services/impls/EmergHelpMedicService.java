@@ -5,9 +5,9 @@ import com.emerghelp.emerghelp.data.models.Medic;
 import com.emerghelp.emerghelp.data.repositories.ConfirmationRepository;
 import com.emerghelp.emerghelp.data.repositories.MedicRepository;
 import com.emerghelp.emerghelp.data.repositories.UserRepository;
-import com.emerghelp.emerghelp.dtos.requests.AcceptOrderRequest;
+import com.emerghelp.emerghelp.dtos.requests.AcceptOrderMedicDTO;
 import com.emerghelp.emerghelp.dtos.requests.RegisterMedicRequest;
-import com.emerghelp.emerghelp.dtos.responses.AcceptOrderResponse;
+import com.emerghelp.emerghelp.dtos.responses.AcceptOrderMedicResponse;
 import com.emerghelp.emerghelp.dtos.responses.RegisterMedicResponse;
 import com.emerghelp.emerghelp.dtos.responses.UpdateMedicalResponse;
 import com.emerghelp.emerghelp.exceptions.*;
@@ -57,9 +57,9 @@ public class EmergHelpMedicService implements MedicService {
         if (medicRepository.existsByEmail(request.getEmail().toLowerCase().strip())) {
             throw new EmailAlreadyExistException("Email already exists");
         }
-        if (medicRepository.existsByLicenseNumber(request.getLicenseNumber().strip())) {
-            throw new LicenseNumberAlreadyExistException("License Number already exists");
-        }
+//        if (medicRepository.existsByLicenseNumber(request.getLicenseNumber().strip())) {
+//            throw new LicenseNumberAlreadyExistException("License Number already exists");
+//        }
         Medic medic = modelMapper.map(request, Medic.class);
         medic.setPassword(passwordEncoder.encode(request.getPassword().strip()));
         medic.setRoles(new HashSet<>());
@@ -69,7 +69,6 @@ public class EmergHelpMedicService implements MedicService {
         Confirmation confirmation = new Confirmation(savedMedic);
         emailService.sendHtmlEmail(savedMedic.getFirstName(), savedMedic.getEmail(), confirmation.getToken());
         RegisterMedicResponse response = modelMapper.map(savedMedic, RegisterMedicResponse.class);
-
         response.setMessage("Your account has been created successfully");
         return response;
     }
@@ -81,7 +80,7 @@ public class EmergHelpMedicService implements MedicService {
             if (confirmation == null) {
                 return Boolean.FALSE;
             }
-            Medic medic = medicRepository.findByEmailIgnoreCase(confirmation.getMedic().getEmail());
+            Medic medic = confirmation.getMedic();
             if (medic == null) {
                 return Boolean.FALSE;
             }
@@ -98,7 +97,7 @@ public class EmergHelpMedicService implements MedicService {
     }
 
     @Override
-    public AcceptOrderResponse acceptOrderMedic(AcceptOrderRequest request) {
+    public AcceptOrderMedicResponse acceptOrderMedic(AcceptOrderMedicDTO request) {
         return null;
     }
 

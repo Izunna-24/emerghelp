@@ -1,13 +1,12 @@
 package com.emerghelp.emerghelp.services.impls;
 
 import com.emerghelp.emerghelp.data.models.Medic;
-import com.emerghelp.emerghelp.data.models.OrderMedic;
 import com.emerghelp.emerghelp.data.models.User;
 import com.emerghelp.emerghelp.data.repositories.OrderMedicRepository;
 import com.emerghelp.emerghelp.data.repositories.MedicRepository;
 import com.emerghelp.emerghelp.data.repositories.UserRepository;
 import com.emerghelp.emerghelp.dtos.requests.OrderMedicDTO;
-import com.emerghelp.emerghelp.dtos.responses.MedicRequestResponse;
+import com.emerghelp.emerghelp.dtos.responses.OrderMedicResponse;
 import com.emerghelp.emerghelp.dtos.responses.OrderMedicHistory;
 import com.emerghelp.emerghelp.exceptions.UserNotFoundException;
 import com.emerghelp.emerghelp.services.MedicOrderService;
@@ -54,7 +53,7 @@ public class MedicOrderServiceTest {
 
         OrderMedicDTO orderMedicDTO = getMedicRequest(user, medic1, "homicide");
 
-        MedicRequestResponse response = medicOrderService.orderMedic(orderMedicDTO);
+        OrderMedicResponse response = medicOrderService.orderMedic(orderMedicDTO);
 
         assertNotNull(response);
         assertEquals(3, response.getAvailableMedic().size());
@@ -82,7 +81,7 @@ public class MedicOrderServiceTest {
 
         OrderMedicDTO orderMedicDTO = getMedicRequest(user, medic1, "suicide attempt");
 
-        MedicRequestResponse response = medicOrderService.orderMedic(orderMedicDTO);
+        OrderMedicResponse response = medicOrderService.orderMedic(orderMedicDTO);
         assertNotNull(response);
         assertTrue(response.getAvailableMedic().isEmpty());
     }

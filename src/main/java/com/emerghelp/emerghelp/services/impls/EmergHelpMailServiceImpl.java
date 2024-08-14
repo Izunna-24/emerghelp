@@ -3,6 +3,7 @@ package com.emerghelp.emerghelp.services.impls;
 import com.emerghelp.emerghelp.config.MailConfig;
 import com.emerghelp.emerghelp.dtos.responses.SendMailResponse;
 import com.emerghelp.emerghelp.exceptions.EmailAlreadyExistException;
+import com.emerghelp.emerghelp.exceptions.EmerghelpBaseException;
 import com.emerghelp.emerghelp.services.EmailService;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +43,7 @@ public class EmergHelpMailServiceImpl implements EmailService {
             emailSender.send(message);
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
-            throw new EmailAlreadyExistException(exception.getMessage());
+            throw new EmerghelpBaseException(exception.getMessage());
         }
         SendMailResponse sendMailResponse = new SendMailResponse();
         sendMailResponse.setMessage("Mail sent successfully");

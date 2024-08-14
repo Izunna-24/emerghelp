@@ -7,7 +7,7 @@ import com.emerghelp.emerghelp.data.repositories.MedicRepository;
 import com.emerghelp.emerghelp.data.repositories.OrderMedicRepository;
 import com.emerghelp.emerghelp.data.repositories.UserRepository;
 import com.emerghelp.emerghelp.dtos.requests.OrderMedicDTO;
-import com.emerghelp.emerghelp.dtos.responses.MedicRequestResponse;
+import com.emerghelp.emerghelp.dtos.responses.OrderMedicResponse;
 import com.emerghelp.emerghelp.dtos.responses.OrderMedicHistory;
 import com.emerghelp.emerghelp.exceptions.OrderMedicNotFoundException;
 import com.emerghelp.emerghelp.exceptions.UserNotFoundException;
@@ -41,7 +41,7 @@ public class EmergHelpMedicOrderService implements MedicOrderService {
     }
 
     @Override
-    public MedicRequestResponse orderMedic(OrderMedicDTO orderMedicDTO) {
+    public OrderMedicResponse orderMedic(OrderMedicDTO orderMedicDTO) {
         User user = userRepository.findById(orderMedicDTO.getUserId())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         OrderMedic orderMedic = buildMedicRequest(orderMedicDTO, user);
@@ -50,7 +50,7 @@ public class EmergHelpMedicOrderService implements MedicOrderService {
         List<Medic> availableMedic = allMedic.stream()
                 .filter(medic -> calculateDistance(medic, orderMedic) < 30)
                 .toList();
-        MedicRequestResponse medicRequestResponse = new MedicRequestResponse();
+        OrderMedicResponse medicRequestResponse = new OrderMedicResponse();
         medicRequestResponse.setAvailableMedic(availableMedic);
         return  medicRequestResponse;
     }

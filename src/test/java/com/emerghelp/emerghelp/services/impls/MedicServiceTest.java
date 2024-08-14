@@ -23,7 +23,7 @@ public class MedicServiceTest {
     @DisplayName("Test that medical practitioner can register")
     void testRegisterAndSendConfirmationEmail1() {
         RegisterMedicRequest request = new RegisterMedicRequest();
-        request.setEmail("eircsonericdon66@gmail.com");
+        request.setEmail("ike20743@gmail.com");
         request.setLicenseNumber("123");
         request.setPassword("password");
         RegisterMedicResponse response = medicService.register(request);
@@ -35,7 +35,7 @@ public class MedicServiceTest {
    public void testRegisterAndSendConfirmationEmail_ThrowException() {
         try {
             RegisterMedicRequest request = new RegisterMedicRequest();
-            request.setEmail("ike20743@gmail.com");
+            request.setEmail("Patrickikechukwukalukalu@gmail.com");
             request.setFirstName("Ikechukwu");
             request.setLicenseNumber("123");
             request.setPassword("password");
@@ -48,3 +48,6 @@ public class MedicServiceTest {
     }
 
 }
+
+//eircsonericdon66@gmail.
+//ike20743@gmail.com
