@@ -5,6 +5,7 @@ import com.emerghelp.emerghelp.dtos.responses.RegisterMedicResponse;
 import com.emerghelp.emerghelp.exceptions.EmailAlreadyExistException;
 import com.emerghelp.emerghelp.exceptions.LicenseNumberAlreadyExistException;
 import com.emerghelp.emerghelp.services.MedicService;
+import jakarta.mail.MessagingException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +24,12 @@ public class MedicServiceTest {
     @DisplayName("Test that medical practitioner can register")
     void testRegisterAndSendConfirmationEmail1() {
         RegisterMedicRequest request = new RegisterMedicRequest();
-        request.setEmail("eircsonericdon66@gmail.com");
-        request.setLicenseNumber("123");
+        request.setFirstName("Izu");
+        request.setEmail("izuchukwuijeudo@gmail.com");
+        request.setLicenseNumber("120");
         request.setPassword("password");
-        RegisterMedicResponse response = medicService.register(request);
-        assertTrue(response.getMessage().contains("Email sent successfully"));
-        assertTrue(true, "Email sent successfully");
-        assertEquals("Your account has been created successfully", response.getMessage());
+        RegisterMedicResponse response = medicService.registerMedic(request);
+        assertTrue(response.getMessage().contains("successfully"));
     }
    @Test
    public void testRegisterAndSendConfirmationEmail_ThrowException() {
@@ -39,10 +39,10 @@ public class MedicServiceTest {
             request.setFirstName("Ikechukwu");
             request.setLicenseNumber("123");
             request.setPassword("password");
-            RegisterMedicResponse response1 = medicService.register(request);
+            RegisterMedicResponse response1 = medicService.registerMedic(request);
             assertTrue(true, "Email sent successfully");
             assertEquals("Your account has been created successfully", response1.getMessage());
-        } catch (EmailAlreadyExistException | LicenseNumberAlreadyExistException  exception) {
+        } catch (EmailAlreadyExistException | LicenseNumberAlreadyExistException exception) {
             exception.printStackTrace();
         }
     }

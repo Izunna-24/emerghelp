@@ -16,13 +16,13 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Setter
 @Getter
 @Table(name = "medic")
-@ToString
 public class Medic {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
     private String firstName;
     private String lastName;
+    @Column(unique = true)
     private String email;
     private String photoUrl;
     private String specialization;
@@ -35,5 +35,5 @@ public class Medic {
     private Boolean isAvailable;
     private String longitude;
     private String latitude;
-    private Boolean isEnabled;
+//    private Boolean isEnabled;
 }

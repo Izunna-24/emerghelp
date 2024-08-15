@@ -1,15 +1,15 @@
 package com.emerghelp.emerghelp.dtos.requests;
 
 import com.emerghelp.emerghelp.data.models.User;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 
 @Getter
 @Setter
 @Builder
-public class AcceptOrderRequest {
+@NoArgsConstructor
+@AllArgsConstructor
+public class AcceptOrderFrom {
     private Long id;
     private User user;
     private String photoUrl;
