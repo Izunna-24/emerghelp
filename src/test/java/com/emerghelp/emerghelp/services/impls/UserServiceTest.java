@@ -47,12 +47,13 @@ public class UserServiceTest {
     @DisplayName("test that user can be registered on the system")
     public void registerTest() {
         RegisterUserRequest request = new RegisterUserRequest();
-        request.setFirstName("Jumoke");
-        request.setLastName("Joseph");
-        request.setEmail("izuchukwuijeudo@gmail.com");
+
+        request.setFirstName("Patrick");
+        request.setLastName("Benjamin");
+        request.setEmail("ike20743@gmail.com");
         request.setPassword("password");
         request.setGender(UNDEFINED);
-        request.setPhoneNumber("09078480034");
+        request.setPhoneNumber("09078480056");
         RegisterUserResponse response = userService.register(request);
         assertNotNull(response);
         assertTrue(response.getMessage().contains("success"));
@@ -94,7 +95,6 @@ public class UserServiceTest {
         assertEquals(FEMALE, viewProfileResponse.getGender());
     }
 
-
     @Test
     @DisplayName("test that user can update profile using JSON Patch")
     public void updateProfileUsingJsonPatchTest() throws JsonPatchException, JsonPointerException {
@@ -119,9 +119,5 @@ public class UserServiceTest {
         assertThat(updatedProfile.getGender()).isEqualTo(UNDEFINED);
         assertThat(updatedProfile.getRoles()).containsExactly(Role.USER);
     }
-
-
-
-
 }
 

@@ -50,36 +50,36 @@ public class EmergHelpMedicService implements MedicService {
         if (medicRepository.existsByLicenseNumber(request.getLicenseNumber().strip())) {
             throw new LicenseNumberAlreadyExistException("License Number already exists");
         }
-            Medic medic = modelMapper.map(request, Medic.class);
-            medic.setPassword(passwordEncoder.encode(request.getPassword()));
-            medic.setRoles(new HashSet<>());
-            medic.getRoles().add(MEDIC);
-            Medic savedmedic = medicRepository.save(medic);
-            emailService.sendHtmlEmailToMedic(savedmedic.getFirstName(), savedmedic.getEmail());
-            RegisterMedicResponse response = modelMapper.map(savedmedic, RegisterMedicResponse.class);
-            response.setMessage("Your account has been created successfully");
-            return response;
-        }
-
-    @Override
-    public Medic getMedicalPractionerById(Long id) {
-        return medicRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(String.format("user with id %d not found", id)));
+        Medic medic = modelMapper.map(request, Medic.class);
+        medic.setPassword(passwordEncoder.encode(request.getPassword()));
+        medic.setRoles(new HashSet<>());
+        medic.getRoles().add(MEDIC);
+        Medic savedmedic = medicRepository.save(medic);
+        emailService.sendHtmlEmailToMedic(savedmedic.getFirstName(), savedmedic.getEmail());
+        RegisterMedicResponse response = modelMapper.map(savedmedic, RegisterMedicResponse.class);
+        response.setMessage("Your account has been created successfully");
+        return response;
     }
 
     @Override
-    public UpdateMedicalResponse updateMedicalPractitioner(Long medicalId, JsonPatch jsonPatch) {
-        try {
-            Medic medicalPractitioner = getMedicalPractionerById(medicalId);
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode practitionerNode = objectMapper.convertValue(medicalPractitioner, JsonNode.class);
-            practitionerNode = jsonPatch.apply(practitionerNode);
-            medicalPractitioner = objectMapper.convertValue(practitionerNode, Medic.class);
-            medicalPractitioner = medicRepository.save(medicalPractitioner);
-            return modelMapper.map(medicalPractitioner, UpdateMedicalResponse.class);
-        } catch (JsonPatchException exception) {
-            throw new MedicalPractitionerUpdateFailException(exception.getMessage());
+    public Medic getMedicById(long id){
+       return medicRepository.findById(id)
+           .orElseThrow(() -> new UserNotFoundException(String.format("user with id %d not found", id)));
+        }
+
+        @Override
+        public UpdateMedicalResponse updateMedicalPractitioner (Long medicalId, JsonPatch jsonPatch){
+            try {
+                Medic medicalPractitioner = getMedicById(medicalId);
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode practitionerNode = objectMapper.convertValue(medicalPractitioner, JsonNode.class);
+                practitionerNode = jsonPatch.apply(practitionerNode);
+                medicalPractitioner = objectMapper.convertValue(practitionerNode, Medic.class);
+                medicalPractitioner = medicRepository.save(medicalPractitioner);
+                return modelMapper.map(medicalPractitioner, UpdateMedicalResponse.class);
+            } catch (JsonPatchException exception) {
+                throw new MedicalPractitionerUpdateFailException(exception.getMessage());
+            }
         }
     }
-}
 

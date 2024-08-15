@@ -5,7 +5,6 @@ import com.emerghelp.emerghelp.dtos.responses.RegisterMedicResponse;
 import com.emerghelp.emerghelp.exceptions.EmailAlreadyExistException;
 import com.emerghelp.emerghelp.exceptions.LicenseNumberAlreadyExistException;
 import com.emerghelp.emerghelp.services.MedicService;
-import jakarta.mail.MessagingException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,7 @@ public class MedicServiceTest {
    public void testRegisterAndSendConfirmationEmail_ThrowException() {
         try {
             RegisterMedicRequest request = new RegisterMedicRequest();
-            request.setEmail("ike20743@gmail.com");
+            request.setEmail("Patrickikechukwukalukalu@gmail.com");
             request.setFirstName("Ikechukwu");
             request.setLicenseNumber("123");
             request.setPassword("password");
@@ -46,5 +45,5 @@ public class MedicServiceTest {
             exception.printStackTrace();
         }
     }
-
 }
+

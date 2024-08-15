@@ -16,6 +16,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Setter
 @Getter
 @Table(name = "medic")
+@ToString
 public class Medic {
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -30,10 +31,10 @@ public class Medic {
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(value = STRING)
     private Set<Role> roles;
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false, unique = true)
     private String licenseNumber;
     private Boolean isAvailable;
-    private String longitude;
-    private String latitude;
-//    private Boolean isEnabled;
+    private double longitude;
+    private double latitude;
+
 }

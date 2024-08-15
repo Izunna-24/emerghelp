@@ -6,6 +6,7 @@ import com.emerghelp.emerghelp.data.constants.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -14,6 +15,7 @@ import java.util.Date;
 @Getter
 @Entity
 @Table(name = "payments")
+@ToString
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

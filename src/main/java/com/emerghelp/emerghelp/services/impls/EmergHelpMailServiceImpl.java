@@ -4,7 +4,6 @@ import com.emerghelp.emerghelp.config.MailConfig;
 import com.emerghelp.emerghelp.dtos.responses.SendMailResponse;
 import com.emerghelp.emerghelp.exceptions.EmailAlreadyExistException;
 import com.emerghelp.emerghelp.services.EmailService;
-import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +49,6 @@ public class EmergHelpMailServiceImpl implements EmailService {
         sendMailResponse.setMessage("Mail sent successfully");
         return sendMailResponse;
     }
-
     @Override
     public SendMailResponse sendHtmlEmailToMedic(String name, String to) {
         try {
@@ -71,10 +69,9 @@ public class EmergHelpMailServiceImpl implements EmailService {
             throw new EmailAlreadyExistException("Email already exist");
         }
         SendMailResponse sendMailResponse = new SendMailResponse();
-        sendMailResponse.setMessage("Mail sent successfully");
+        sendMailResponse.setMessage("sent successfully");
         return sendMailResponse;
     }
-
 
     private MimeMessage getMimeMessage() {
         return emailSender.createMimeMessage();

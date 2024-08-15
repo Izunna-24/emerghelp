@@ -8,10 +8,13 @@ import com.emerghelp.emerghelp.data.repositories.RatingRepository;
 import com.emerghelp.emerghelp.data.repositories.UserRepository;
 import com.emerghelp.emerghelp.dtos.requests.RatingRequest;
 import com.emerghelp.emerghelp.dtos.responses.RatingRequestResponse;
+import com.emerghelp.emerghelp.exceptions.MedicNotFoundException;
+import com.emerghelp.emerghelp.exceptions.UserNotFoundException;
 import com.emerghelp.emerghelp.services.RatingService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,7 +23,7 @@ public class EmergHelpRatingService implements RatingService {
     private final RatingRepository ratingRepository;
     private final UserRepository userRepository;
     private final MedicRepository medicRepository;
-    private final ModelMapper modelMapper;
+
 
     @Autowired
     public EmergHelpRatingService(RatingRepository ratingRepository,
@@ -29,24 +32,38 @@ public class EmergHelpRatingService implements RatingService {
         this.medicRepository = medicRepository;
         this.ratingRepository = ratingRepository;
         this.userRepository = userRepository;
-        this.modelMapper = modelMapper;
     }
 
+    @Transactional
     @Override
     public RatingRequestResponse addRating(RatingRequest ratingRequest) {
-        Rating rating = modelMapper.map(ratingRequest, Rating.class);
-        User rater = userRepository.findById(rating.getRater().getId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        Medic medicRated = medicRepository.findById(rating.getMedicRated().getId())
-                .orElseThrow(() -> new RuntimeException("Medic not found"));
+        validateRatingRequest(ratingRequest);
+        Rating rating = new Rating();
+        rating.setScore(ratingRequest.getScore());
+        rating.setComment(ratingRequest.getComment());
+        User rater = userRepository.findById(ratingRequest.getRaterId())
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        Medic medicRated = medicRepository.findById(ratingRequest.getMedicRatedId())
+                .orElseThrow(() -> new MedicNotFoundException("Medic not found"));
         rating.setRater(rater);
         rating.setMedicRated(medicRated);
-        rating =  ratingRepository.save(rating);
-        RatingRequestResponse response = modelMapper.map(rating, RatingRequestResponse.class);
-        response.setScore(4);
-        response.setComment("great nurse");
+
+        rating = ratingRepository.save(rating);
+        RatingRequestResponse response = new RatingRequestResponse();
+        response.setScore(rating.getScore());
+        response.setComment(rating.getComment());
         return response;
     }
+
+    private void validateRatingRequest(RatingRequest request) {
+        if (request.getScore() < 1 || request.getScore() > 5) {
+            throw new IllegalArgumentException("Score must be between 1 and 5");
+        }
+        if (request.getComment() == null || request.getComment().trim().isEmpty()) {
+            throw new IllegalArgumentException("Comment cannot be empty");
+        }
+    }
+
 
 
 
