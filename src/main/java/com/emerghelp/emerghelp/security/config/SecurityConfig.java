@@ -24,6 +24,8 @@ public class SecurityConfig {
     private final AuthenticationManager authenticationManager;
     private final CustomAuthorizationFilter authorizationFilter;
 
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http )
             throws Exception {

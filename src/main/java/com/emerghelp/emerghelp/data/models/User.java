@@ -30,5 +30,6 @@ public class User {
     @Enumerated(value = STRING)
     private Set<Role> roles;
     private boolean isEnabled;
+    private boolean isLoggedIn;
 
 }

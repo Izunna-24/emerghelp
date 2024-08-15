@@ -4,10 +4,14 @@ import com.emerghelp.emerghelp.data.constants.Role;
 import com.emerghelp.emerghelp.data.models.User;
 import com.emerghelp.emerghelp.data.repositories.OrderMedicRepository;
 import com.emerghelp.emerghelp.data.repositories.UserRepository;
+import com.emerghelp.emerghelp.dtos.requests.LoginRequest;
+import com.emerghelp.emerghelp.dtos.requests.LogoutRequest;
 import com.emerghelp.emerghelp.dtos.requests.RegisterUserRequest;
+import com.emerghelp.emerghelp.dtos.responses.LoginResponse;
+import com.emerghelp.emerghelp.dtos.responses.LogoutResponse;
 import com.emerghelp.emerghelp.dtos.responses.RegisterUserResponse;
 import com.emerghelp.emerghelp.dtos.responses.ViewProfileResponse;
-import com.emerghelp.emerghelp.exceptions.EmailAlreadyExistException;
+import com.emerghelp.emerghelp.exceptions.EmerghelpBaseException;
 import com.emerghelp.emerghelp.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.TextNode;
@@ -52,10 +56,10 @@ public class UserServiceTest {
         request.setFirstName("Patrick");
         request.setLastName("Benjamin");
         request.setEmail("ike20743@gmail.com");
-        request.setPassword("password");
+        request.setPassword("passWord");
         request.setGender(UNDEFINED);
         request.setPhoneNumber("09078480056");
-        assertThrows(EmailAlreadyExistException.class,()-> userService.register(request));
+        assertThrows(EmerghelpBaseException.class,()-> userService.register(request));
 //        RegisterUserResponse response = userService.register(request);
 //        assertNotNull(response);
 //        assertTrue(response.getMessage().contains("success"));
@@ -106,6 +110,45 @@ public class UserServiceTest {
         assertThat(updatedProfile.getEmail()).isEqualTo("jummy@gmail.com");
         assertThat(updatedProfile.getGender()).isEqualTo(UNDEFINED);
         assertThat(updatedProfile.getRoles()).containsExactly(Role.USER);
+    }
+
+    @Test
+    @DisplayName("Test that user can login")
+    public void loginTest() {
+     String email = "ridrijulmi@gufum.com";
+     String password = "password";
+     LoginRequest loginRequests = new LoginRequest();
+     loginRequests.setEmail(email);
+     loginRequests.setPassword(password);
+     LoginResponse loginResponse = userService.login(loginRequests);
+     assertEquals("Login successful", loginResponse.getMessage());
+
+    }
+    @Test
+    @DisplayName("Test that user can't login with incorrect email")
+    public void loginWithIncorrectEmailTest() {
+        String email = "ridrijulmi@gufumFGH.com";
+        String password = "wrongPassword";
+        LoginRequest loginRequests = new LoginRequest();
+        loginRequests.setEmail(email);
+        loginRequests.setPassword(password);
+        assertThrows(EmerghelpBaseException.class,()-> userService.login(loginRequests));
+    }
+
+    @Test
+    @DisplayName("Test that user can logout after logging in")
+    public void logoutTest() {
+        LogoutRequest logoutRequest = new LogoutRequest();
+        logoutRequest.setEmail("ridrijulmi@gufum.com");
+        LogoutResponse response = userService.logout(logoutRequest);
+        assertNotNull(response);
+        assertEquals("Logout successful", response.getMessage());
+        User user = userRepository.findByEmail("ridrijulmi@gufum.com").orElseThrow();
+        assertFalse(user.isLoggedIn());
+
+
+
+
     }
 
 
