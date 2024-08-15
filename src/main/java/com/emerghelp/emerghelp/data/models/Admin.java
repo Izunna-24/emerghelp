@@ -21,6 +21,7 @@ import static jakarta.persistence.EnumType.STRING;
 @Setter
 @Getter
 @ToString
+@Table(name = "admin")
 public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

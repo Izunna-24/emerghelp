@@ -23,6 +23,7 @@ public class Medic {
     private Long id;
     private String firstName;
     private String lastName;
+    @Column(unique = true)
     private String email;
     private String photoUrl;
     private String specialization;
@@ -30,10 +31,10 @@ public class Medic {
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(value = STRING)
     private Set<Role> roles;
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false, unique = true)
     private String licenseNumber;
     private Boolean isAvailable;
     private double longitude;
     private double latitude;
-    private Boolean isEnabled;
+
 }

@@ -7,7 +7,6 @@ import com.emerghelp.emerghelp.data.repositories.UserRepository;
 import com.emerghelp.emerghelp.dtos.requests.RegisterUserRequest;
 import com.emerghelp.emerghelp.dtos.responses.RegisterUserResponse;
 import com.emerghelp.emerghelp.dtos.responses.ViewProfileResponse;
-import com.emerghelp.emerghelp.exceptions.EmailAlreadyExistException;
 import com.emerghelp.emerghelp.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.TextNode;
@@ -59,6 +58,21 @@ public class UserServiceTest {
         assertNotNull(response);
         assertTrue(response.getMessage().contains("success"));
     }
+
+    @Test
+    @DisplayName("test that user can be registered on the system")
+    public void registerTest_AndThrowError() {
+        RegisterUserRequest request = new RegisterUserRequest();
+        request.setFirstName("Jumoke");
+        request.setLastName("Joseph");
+        request.setEmail("ericsonericdon66@gmail.com");
+        request.setPassword("password");
+        request.setGender(UNDEFINED);
+        request.setPhoneNumber("09078480034");
+        RegisterUserResponse response = userService.register(request);
+        assertNotNull(response);
+        assertTrue(response.getMessage().contains("success"));
+    }
     @Test
     @DisplayName("test that user can view profile")
     public void viewProfileTest() {
@@ -80,7 +94,6 @@ public class UserServiceTest {
         assertEquals("josephfeyisetan123@gmail.com", viewProfileResponse.getEmail());
         assertEquals(FEMALE, viewProfileResponse.getGender());
     }
-
 
     @Test
     @DisplayName("test that user can update profile using JSON Patch")
@@ -106,9 +119,5 @@ public class UserServiceTest {
         assertThat(updatedProfile.getGender()).isEqualTo(UNDEFINED);
         assertThat(updatedProfile.getRoles()).containsExactly(Role.USER);
     }
-
-
-
-
 }
 

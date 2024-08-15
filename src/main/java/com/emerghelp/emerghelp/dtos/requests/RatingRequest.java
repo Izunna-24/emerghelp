@@ -1,6 +1,5 @@
 package com.emerghelp.emerghelp.dtos.requests;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 

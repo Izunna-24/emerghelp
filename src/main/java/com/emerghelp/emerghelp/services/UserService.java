@@ -10,7 +10,6 @@ public interface UserService {
 RegisterUserResponse register(RegisterUserRequest registerUserRequest);
 User getById(Long id);
 
-Boolean verifyToken(String token);
 User getUserByEmail(String username);
 
 ViewProfileResponse viewProfile(Long id);
