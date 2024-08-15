@@ -1,15 +1,15 @@
 package com.emerghelp.emerghelp.services.impls;
 
-import com.emerghelp.emerghelp.data.models.Confirmation;
 import com.emerghelp.emerghelp.data.models.User;
 import com.emerghelp.emerghelp.data.repositories.ConfirmationRepository;
 import com.emerghelp.emerghelp.data.repositories.OrderMedicRepository;
 import com.emerghelp.emerghelp.data.repositories.UserRepository;
+import com.emerghelp.emerghelp.dtos.requests.LoginRequest;
+import com.emerghelp.emerghelp.dtos.requests.LogoutRequest;
 import com.emerghelp.emerghelp.dtos.requests.RegisterUserRequest;
-import com.emerghelp.emerghelp.dtos.responses.RegisterUserResponse;
-import com.emerghelp.emerghelp.dtos.responses.UpdateProfileResponse;
-import com.emerghelp.emerghelp.dtos.responses.ViewProfileResponse;
+import com.emerghelp.emerghelp.dtos.responses.*;
 import com.emerghelp.emerghelp.exceptions.EmailAlreadyExistException;
+import com.emerghelp.emerghelp.exceptions.EmerghelpBaseException;
 import com.emerghelp.emerghelp.exceptions.UserNotFoundException;
 import com.emerghelp.emerghelp.services.EmailService;
 import com.emerghelp.emerghelp.services.UserService;
@@ -19,11 +19,12 @@ import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Optional;
+
 import static com.emerghelp.emerghelp.data.constants.Role.USER;
 
 
@@ -32,7 +33,6 @@ public class EmerghelpUserService implements UserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
-    private final ConfirmationRepository confirmationRepository;
     private final EmailService emailService;
 
     private final OrderMedicRepository orderMedicRepository;
@@ -43,11 +43,10 @@ public class EmerghelpUserService implements UserService {
     public EmerghelpUserService(UserRepository userRepository,
                                 ModelMapper modelMapper,
                                 PasswordEncoder passwordEncoder,
-                                ConfirmationRepository confirmationRepository, EmailService emailService, OrderMedicRepository orderMedicRepository) {
+                                EmailService emailService, OrderMedicRepository orderMedicRepository) {
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.confirmationRepository = confirmationRepository;
         this.emailService = emailService;
         this.orderMedicRepository = orderMedicRepository;
 
@@ -59,40 +58,15 @@ public class EmerghelpUserService implements UserService {
             throw new EmailAlreadyExistException("Email already exists, consider logging in instead");
         }
         User user = modelMapper.map(request, User.class);
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRoles(new HashSet<>());
         user.getRoles().add(USER);
         user.setEnabled(false);
+        user.setLoggedIn(false);
         User savedUser = userRepository.save(user);
-        Confirmation confirmation = new Confirmation(savedUser);
-        emailService.sendHtmlEmail(savedUser.getFirstName(), savedUser.getEmail(), confirmation.getToken());
-
+        emailService.sendHtmlEmail(savedUser.getFirstName(), savedUser.getEmail());
         RegisterUserResponse response = modelMapper.map(savedUser, RegisterUserResponse.class);
         response.setMessage("Your account has been created successfully");
         return response;
-    }
-
-    @Override
-    public Boolean verifyToken(String token) {
-        try {
-            Confirmation confirmation = confirmationRepository.findByToken(token);
-            if (confirmation == null) {
-                return Boolean.FALSE;
-            }
-            User user = userRepository.findByEmailIgnoreCase(confirmation.getUser().getEmail());
-            if (user == null) {
-                return Boolean.FALSE;
-            }
-            user.setEnabled(true);
-            userRepository.save(user);
-            return Boolean.TRUE;
-        } catch (DataAccessException e) {
-            System.err.println("Error accessing data: " + e.getMessage());
-            return Boolean.FALSE;
-        } catch (Exception e) {
-            System.err.println("Unexpected error: " + e.getMessage());
-            return Boolean.FALSE;
-        }
     }
 
     @Override
@@ -143,4 +117,42 @@ public class EmerghelpUserService implements UserService {
         }
 
     }
+
+    @Override
+    public LoginResponse login(LoginRequest request) {
+        System.out.println(request);
+        Optional<User> optionalUser = userRepository.findByEmail(request.getEmail());
+        if (optionalUser.isPresent()) {
+            User qualifiedUser = optionalUser.get();
+            if (qualifiedUser.getPassword().equals(request.getPassword())) {
+                qualifiedUser.setLoggedIn(true);
+                LoginResponse response = new LoginResponse();
+                response.setMessage("Login successful");
+                return response;
+
+            }
+        }
+        throw new EmerghelpBaseException("Invalid email or password");
+    }
+
+    @Override
+    public LogoutResponse logout(LogoutRequest logoutRequest) {
+        Optional<User> user = userRepository.findByEmail(logoutRequest.getEmail());
+        if (user.isPresent()) {
+            User userToLoggedOut = user.get();
+            userToLoggedOut.setLoggedIn(false);
+            userRepository.save(userToLoggedOut);
+            LogoutResponse response = new LogoutResponse();
+            response.setMessage("Logout successful");
+            return response;
+        }
+        throw new EmerghelpBaseException("User not found");
+
+
+    }
+
+
+
+
+
 }

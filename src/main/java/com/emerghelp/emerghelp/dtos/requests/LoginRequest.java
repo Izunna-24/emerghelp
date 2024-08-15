@@ -9,6 +9,7 @@ import lombok.*;
 @Setter
 @Builder
 @NoArgsConstructor
+@ToString
 @AllArgsConstructor
 public class LoginRequest {
         @JsonProperty("email")
@@ -16,5 +17,6 @@ public class LoginRequest {
         private String email;
         @Pattern(regexp = "[a-zA-Z0-9]{8,}+[+-.,/]",message = "password must include alphabets, symbols and numbers")
         private String password;
+        private boolean isLoggedIn;
 
 }
