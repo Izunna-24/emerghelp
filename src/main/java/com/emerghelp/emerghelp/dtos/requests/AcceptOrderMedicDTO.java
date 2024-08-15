@@ -9,5 +9,6 @@ import lombok.Setter;
 public class AcceptOrderMedicDTO {
    private Long orderId;
    private Long medicId;
+   private Long userId;
 
 }

@@ -30,5 +30,7 @@ public class User {
     @Enumerated(value = STRING)
     private Set<Role> roles;
     private boolean isEnabled;
+    private double latitude;
+    private double longitude;
 
 }

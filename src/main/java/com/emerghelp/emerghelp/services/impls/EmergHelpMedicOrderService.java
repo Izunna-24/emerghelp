@@ -52,13 +52,10 @@ public class EmergHelpMedicOrderService implements MedicOrderService {
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         OrderMedic orderMedic = buildMedicRequest(orderMedicDTO, user);
         OrderMedic savedMedic = orderMedicRepository.save(orderMedic);
-
         List<Medic> allMedic = medicRepository.findAll();
-
         List<Medic> availableMedic = allMedic.stream()
                 .filter(medic -> calculateDistance(medic, orderMedic) < 30)
                 .toList();
-
         OrderMedicResponse medicRequestResponse = new OrderMedicResponse();
         medicRequestResponse.setAvailableMedic(availableMedic);
         medicRequestResponse.setId(savedMedic.getId());
@@ -77,8 +74,9 @@ public class EmergHelpMedicOrderService implements MedicOrderService {
         Medic medic = medicRepository.findById(acceptOrderMedic.getMedicId())
                 .orElseThrow(() -> new MedicNotFoundException("Medic not found"));
 
-        if (calculateDistance(medic, orderMedic) >= 30)
+        if (calculateDistance(medic, orderMedic) >= 30) {
             throw new MedicTooFarException("Medic too far to accept this order");
+        }
 
         orderMedic.setAssignedMedic(medic);
         orderMedic.setOrderMedicStatus(ACCEPTED);
