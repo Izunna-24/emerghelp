@@ -3,6 +3,7 @@ package com.emerghelp.emerghelp.services.impls;
 import com.emerghelp.emerghelp.dtos.requests.RegisterMedicRequest;
 import com.emerghelp.emerghelp.dtos.responses.RegisterMedicResponse;
 import com.emerghelp.emerghelp.exceptions.EmailAlreadyExistException;
+import com.emerghelp.emerghelp.exceptions.EmerghelpBaseException;
 import com.emerghelp.emerghelp.exceptions.LicenseNumberAlreadyExistException;
 import com.emerghelp.emerghelp.services.MedicService;
 import org.junit.jupiter.api.DisplayName;
@@ -22,7 +23,6 @@ public class MedicServiceTest {
     @Test
     @DisplayName("Test that medical practitioner can register")
     void testRegisterAndSendConfirmationEmail1() {
-        RegisterMedicRequest request = new RegisterMedicRequest();
         request.setFirstName("Izu");
         request.setEmail("izuchukwuijeudo@gmail.com");
         request.setLicenseNumber("120");

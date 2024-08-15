@@ -4,11 +4,12 @@ import com.emerghelp.emerghelp.data.models.User;
 import com.emerghelp.emerghelp.data.repositories.ConfirmationRepository;
 import com.emerghelp.emerghelp.data.repositories.OrderMedicRepository;
 import com.emerghelp.emerghelp.data.repositories.UserRepository;
+import com.emerghelp.emerghelp.dtos.requests.LoginRequest;
+import com.emerghelp.emerghelp.dtos.requests.LogoutRequest;
 import com.emerghelp.emerghelp.dtos.requests.RegisterUserRequest;
-import com.emerghelp.emerghelp.dtos.responses.RegisterUserResponse;
-import com.emerghelp.emerghelp.dtos.responses.UpdateProfileResponse;
-import com.emerghelp.emerghelp.dtos.responses.ViewProfileResponse;
+import com.emerghelp.emerghelp.dtos.responses.*;
 import com.emerghelp.emerghelp.exceptions.EmailAlreadyExistException;
+import com.emerghelp.emerghelp.exceptions.EmerghelpBaseException;
 import com.emerghelp.emerghelp.exceptions.UserNotFoundException;
 import com.emerghelp.emerghelp.services.EmailService;
 import com.emerghelp.emerghelp.services.UserService;
@@ -21,7 +22,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Optional;
+
 import static com.emerghelp.emerghelp.data.constants.Role.USER;
 
 
@@ -55,9 +58,10 @@ public class EmerghelpUserService implements UserService {
             throw new EmailAlreadyExistException("Email already exists, consider logging in instead");
         }
         User user = modelMapper.map(request, User.class);
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRoles(new HashSet<>());
         user.getRoles().add(USER);
+        user.setEnabled(false);
+        user.setLoggedIn(false);
         User savedUser = userRepository.save(user);
         emailService.sendHtmlEmail(savedUser.getFirstName(), savedUser.getEmail());
         RegisterUserResponse response = modelMapper.map(savedUser, RegisterUserResponse.class);
@@ -113,4 +117,42 @@ public class EmerghelpUserService implements UserService {
         }
 
     }
+
+    @Override
+    public LoginResponse login(LoginRequest request) {
+        System.out.println(request);
+        Optional<User> optionalUser = userRepository.findByEmail(request.getEmail());
+        if (optionalUser.isPresent()) {
+            User qualifiedUser = optionalUser.get();
+            if (qualifiedUser.getPassword().equals(request.getPassword())) {
+                qualifiedUser.setLoggedIn(true);
+                LoginResponse response = new LoginResponse();
+                response.setMessage("Login successful");
+                return response;
+
+            }
+        }
+        throw new EmerghelpBaseException("Invalid email or password");
+    }
+
+    @Override
+    public LogoutResponse logout(LogoutRequest logoutRequest) {
+        Optional<User> user = userRepository.findByEmail(logoutRequest.getEmail());
+        if (user.isPresent()) {
+            User userToLoggedOut = user.get();
+            userToLoggedOut.setLoggedIn(false);
+            userRepository.save(userToLoggedOut);
+            LogoutResponse response = new LogoutResponse();
+            response.setMessage("Logout successful");
+            return response;
+        }
+        throw new EmerghelpBaseException("User not found");
+
+
+    }
+
+
+
+
+
 }

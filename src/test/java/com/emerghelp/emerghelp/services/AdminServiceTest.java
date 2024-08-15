@@ -49,7 +49,7 @@ public class AdminServiceTest {
         User user = new User();
         user.setEmail("ridrijulmi@gufum.com");
         user.setPassword("password");
-        user.setId(200L);
+        user.setId(202L);
         user.setEnabled(false);
         DeactivateUserRequests deactivateUserRequests = new DeactivateUserRequests();
         deactivateUserRequests.setUserId(user.getId());
