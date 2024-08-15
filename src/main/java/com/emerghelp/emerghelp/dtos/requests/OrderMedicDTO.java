@@ -10,7 +10,7 @@ import lombok.*;
 public class OrderMedicDTO {
    private Long userId;
    private Long medicId;
-   private String longitude;
-   private String latitude;
+   private double longitude;
+   private double latitude;
    private String description;
 }

@@ -5,7 +5,6 @@ import com.emerghelp.emerghelp.data.constants.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.Set;
 
 import static jakarta.persistence.EnumType.STRING;
@@ -29,7 +28,7 @@ public class User {
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(value = STRING)
     private Set<Role> roles;
-    private boolean isEnabled;
+    private boolean isEnabled; 
     private boolean isLoggedIn;
 
-}
+

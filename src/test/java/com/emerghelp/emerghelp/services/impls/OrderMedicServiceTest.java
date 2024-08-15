@@ -1,20 +1,28 @@
 package com.emerghelp.emerghelp.services.impls;
 
+import com.emerghelp.emerghelp.data.constants.OrderMedicStatus;
 import com.emerghelp.emerghelp.data.models.Medic;
+import com.emerghelp.emerghelp.data.models.OrderMedic;
 import com.emerghelp.emerghelp.data.models.User;
 import com.emerghelp.emerghelp.data.repositories.OrderMedicRepository;
 import com.emerghelp.emerghelp.data.repositories.MedicRepository;
 import com.emerghelp.emerghelp.data.repositories.UserRepository;
+import com.emerghelp.emerghelp.dtos.requests.AcceptOrderMedicDTO;
 import com.emerghelp.emerghelp.dtos.requests.OrderMedicDTO;
+import com.emerghelp.emerghelp.dtos.responses.AcceptOrderMedicResponse;
 import com.emerghelp.emerghelp.dtos.responses.OrderMedicResponse;
 import com.emerghelp.emerghelp.dtos.responses.OrderMedicHistory;
 import com.emerghelp.emerghelp.exceptions.UserNotFoundException;
 import com.emerghelp.emerghelp.services.MedicOrderService;
+import com.emerghelp.emerghelp.services.MedicService;
+import com.emerghelp.emerghelp.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,17 +31,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-public class MedicOrderServiceTest {
+@Rollback
+@Sql(scripts = {"/db/data.sql"})
+public class OrderMedicServiceTest {
     @Autowired
     private MedicOrderService medicOrderService;
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
     @Autowired
     private MedicRepository medicRepository;
     @Autowired
     private OrderMedicRepository orderMedicRepository;
     @Autowired
-    private ModelMapper modelMapper;
+    private UserRepository userRepository;
+    @Autowired
+    private MedicService medicService;
 
 
     @BeforeEach
@@ -43,18 +55,14 @@ public class MedicOrderServiceTest {
 
 
     @Test
-    public void testThatUserCanOrderMedic(){
+    public void testThatUserCan_orderMedic(){
         User user = getUser();
         Medic medic1 = createMedic(6.506125,  3.377417, "23"); // Sabo Yaba
         Medic medic2 = createMedic(6.59651000, 3.34205000, "65"); //Ikeja
         Medic medic3 = createMedic(6.5166646,  3.38499846, "234"); // Unilag
         medicRepository.saveAll(Arrays.asList(medic1, medic2, medic3));
-
-
         OrderMedicDTO orderMedicDTO = getMedicRequest(user, medic1, "homicide");
-
         OrderMedicResponse response = medicOrderService.orderMedic(orderMedicDTO);
-
         assertNotNull(response);
         assertEquals(3, response.getAvailableMedic().size());
         assertEquals(medic3.getId(), response.getAvailableMedic().get(2).getId());
@@ -63,17 +71,17 @@ public class MedicOrderServiceTest {
 
     private Medic createMedic(double latitude, double longitude, String licenseNumber) {
         Medic medic = new Medic();
-        medic.setEmail("Test Medic");
+        medic.setEmail("abiodun@gmail.com");
         medic.setPassword("password");
         medic.setLicenseNumber(licenseNumber);
-        medic.setLatitude(String.valueOf(latitude));
-        medic.setLongitude(String.valueOf(longitude));
+        medic.setLatitude(latitude);
+        medic.setLongitude(longitude);
         return medic;
     }
 
     @Test
     void testOrderMedic_whenNoAvailableMedics() {
-        User user = getUser();
+         User user = getUser();
 
         Medic medic1 = createMedic(80.0, 80.0,"99"); // location beyond 30km
         Medic medic2 = createMedic(-80.0, -80.0,"90"); // location beyond 30km
@@ -88,7 +96,7 @@ public class MedicOrderServiceTest {
 
     private User getUser() {
         User user = new User();
-        user.setEmail("email.com");
+        user.setEmail("otilo@yahoomail.com");
         user.setPassword("password");
         user.setId(200L);
         user = userRepository.save(user);
@@ -98,8 +106,8 @@ public class MedicOrderServiceTest {
     private static OrderMedicDTO getMedicRequest(User user, Medic medic1, String suicide_attempt) {
         OrderMedicDTO orderMedicDTO = new OrderMedicDTO();
         orderMedicDTO.setUserId(user.getId());
-        orderMedicDTO.setLatitude(String.valueOf(6.506125));
-        orderMedicDTO.setLongitude(String.valueOf(3.377417));
+        orderMedicDTO.setLatitude(6.506125);
+        orderMedicDTO.setLongitude(3.377417);
         orderMedicDTO.setMedicId(medic1.getId());
         orderMedicDTO.setDescription(suicide_attempt);
         return orderMedicDTO;
@@ -135,7 +143,7 @@ public class MedicOrderServiceTest {
         }
 
         @Test
-        public void testViewAllOrderFor_MultipleMedicRequests() {
+        public void testViewAllOrderFor_multipleMedicRequests() {
             User user = getUser();
             Medic medic1 = createMedic(80.0, 80.0,"99");
             Medic medic2 = createMedic(80.0, 80.0,"99");
@@ -158,4 +166,35 @@ public class MedicOrderServiceTest {
             List<OrderMedicHistory> orderHistory = medicOrderService.viewAllOrderFor(user.getId());
             assertThat(orderHistory).hasSize(2);
         }
+
+    @Transactional
+    @Test
+    @Rollback
+    @Sql(scripts = {"/db/data.sql"})
+    public void testMedicAcceptOrder_successful() {
+        User user = userService.getById(200L);
+        Medic medic = medicService.getMedicById(300L);
+
+        OrderMedicDTO orderMedicDTO = new OrderMedicDTO();
+        orderMedicDTO.setMedicId(medic.getId());
+        orderMedicDTO.setUserId(user.getId());
+        orderMedicDTO.setDescription("heart attack");
+        orderMedicDTO.setLongitude(medic.getLongitude());
+        orderMedicDTO.setLatitude(medic.getLatitude());
+
+        OrderMedicResponse response = medicOrderService.orderMedic(orderMedicDTO);
+        assertThat(response.getId()).isNotNull();
+        AcceptOrderMedicDTO acceptOrderMedicDTO = new AcceptOrderMedicDTO();
+        acceptOrderMedicDTO.setOrderId(response.getId());
+        acceptOrderMedicDTO.setMedicId(medic.getId());
+        AcceptOrderMedicResponse acceptOrder = medicOrderService.acceptOrder(acceptOrderMedicDTO);
+        assertThat(acceptOrder).isNotNull();
+        assertThat(acceptOrder.getOrderId()).isEqualTo(response.getId());
+        assertThat(acceptOrder.getMedicId()).isEqualTo(medic.getId());
+        assertThat(acceptOrder.getStatus()).isEqualTo(OrderMedicStatus.ACCEPTED);
     }
+        }
+
+
+
+

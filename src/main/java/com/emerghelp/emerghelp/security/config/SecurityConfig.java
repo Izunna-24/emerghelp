@@ -39,13 +39,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(c->
                         c.requestMatchers(POST,"/api/v1/auth").permitAll()
                                 .requestMatchers("/api/users/create-user").permitAll()
+                                .requestMatchers("/api/payments/initialize").permitAll()
                                 .requestMatchers("/admin/register").permitAll()
                                 .requestMatchers("/admin/deactivate").permitAll()
                                 .requestMatchers("/admin/activate").permitAll()
                                 .requestMatchers("/api/v1/request").hasAnyAuthority("USER")
-                                .anyRequest().authenticated()
-                )
-                .build();
+                                .anyRequest().authenticated())
+                                .build();
     }
     @Bean
     public CorsFilter corsFilter() {
@@ -63,6 +63,6 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-    }
+}
 
 

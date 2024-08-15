@@ -12,7 +12,7 @@ import java.util.Properties;
 @Configuration
 @Getter
 public class MailConfig {
-    @Value("${spring.mail.verify.host}")
+    @Value("${spring.mail.host}")
     private String host;
     @Value("${spring.mail.username}")
     private String fromEmail;

@@ -1,6 +1,5 @@
 package com.emerghelp.emerghelp.services.impls;
 
-import com.emerghelp.emerghelp.data.models.Confirmation;
 import com.emerghelp.emerghelp.data.models.User;
 import com.emerghelp.emerghelp.data.repositories.ConfirmationRepository;
 import com.emerghelp.emerghelp.data.repositories.OrderMedicRepository;
@@ -20,7 +19,6 @@ import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +33,6 @@ public class EmerghelpUserService implements UserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
-    private final ConfirmationRepository confirmationRepository;
     private final EmailService emailService;
 
     private final OrderMedicRepository orderMedicRepository;
@@ -46,11 +43,10 @@ public class EmerghelpUserService implements UserService {
     public EmerghelpUserService(UserRepository userRepository,
                                 ModelMapper modelMapper,
                                 PasswordEncoder passwordEncoder,
-                                ConfirmationRepository confirmationRepository, EmailService emailService, OrderMedicRepository orderMedicRepository) {
+                                EmailService emailService, OrderMedicRepository orderMedicRepository) {
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.confirmationRepository = confirmationRepository;
         this.emailService = emailService;
         this.orderMedicRepository = orderMedicRepository;
 
@@ -62,41 +58,15 @@ public class EmerghelpUserService implements UserService {
             throw new EmailAlreadyExistException("Email already exists, consider logging in instead");
         }
         User user = modelMapper.map(request, User.class);
-        //user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRoles(new HashSet<>());
         user.getRoles().add(USER);
         user.setEnabled(false);
         user.setLoggedIn(false);
         User savedUser = userRepository.save(user);
-        Confirmation confirmation = new Confirmation(savedUser);
-        emailService.sendHtmlEmail(savedUser.getFirstName(), savedUser.getEmail(), confirmation.getToken());
-
+        emailService.sendHtmlEmail(savedUser.getFirstName(), savedUser.getEmail());
         RegisterUserResponse response = modelMapper.map(savedUser, RegisterUserResponse.class);
         response.setMessage("Your account has been created successfully");
         return response;
-    }
-
-    @Override
-    public Boolean verifyToken(String token) {
-        try {
-            Confirmation confirmation = confirmationRepository.findByToken(token);
-            if (confirmation == null) {
-                return Boolean.FALSE;
-            }
-            User user = userRepository.findByEmailIgnoreCase(confirmation.getUser().getEmail());
-            if (user == null) {
-                return Boolean.FALSE;
-            }
-            user.setEnabled(true);
-            userRepository.save(user);
-            return Boolean.TRUE;
-        } catch (DataAccessException e) {
-            System.err.println("Error accessing data: " + e.getMessage());
-            return Boolean.FALSE;
-        } catch (Exception e) {
-            System.err.println("Unexpected error: " + e.getMessage());
-            return Boolean.FALSE;
-        }
     }
 
     @Override

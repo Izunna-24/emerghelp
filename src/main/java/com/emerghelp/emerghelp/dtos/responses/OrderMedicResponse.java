@@ -11,5 +11,6 @@ import java.util.List;
 @Getter
 @Setter
 public class OrderMedicResponse {
+    private Long id;
     private List<Medic> availableMedic;
 }
