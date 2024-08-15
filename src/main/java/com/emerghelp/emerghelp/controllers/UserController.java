@@ -4,7 +4,7 @@ import com.emerghelp.emerghelp.dtos.requests.RegisterUserRequest;
 import com.emerghelp.emerghelp.dtos.responses.HttpResponses;
 import com.emerghelp.emerghelp.dtos.responses.RegisterUserResponse;
 import com.emerghelp.emerghelp.services.UserService;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +15,8 @@ import java.util.Map;
 
 
 @RestController
-@RequestMapping("/api/users/create-user")
-@RequiredArgsConstructor
+@RequestMapping("/api/v1/create-user")
+@AllArgsConstructor
 public class UserController {
 
     private final UserService userService;
@@ -34,4 +34,8 @@ public class UserController {
                         .build()
         );
     }
+
+
+
+
 }

@@ -2,7 +2,6 @@ package com.emerghelp.emerghelp.services.impls;
 
 import com.emerghelp.emerghelp.data.constants.OrderMedicStatus;
 import com.emerghelp.emerghelp.data.models.Medic;
-import com.emerghelp.emerghelp.data.models.OrderMedic;
 import com.emerghelp.emerghelp.data.models.User;
 import com.emerghelp.emerghelp.data.repositories.OrderMedicRepository;
 import com.emerghelp.emerghelp.data.repositories.MedicRepository;
