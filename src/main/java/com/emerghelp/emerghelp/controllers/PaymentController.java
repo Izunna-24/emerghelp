@@ -21,18 +21,18 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
-//    @PostMapping("/initialize")
-//    public ResponseEntity<PaymentResponse> initializePayment(@Valid @RequestBody PaymentRequest paymentRequest) {
-//        PaymentResponse paymentResponse = paymentService.initializePayment(paymentRequest);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(paymentResponse);
-//    }
-//    @GetMapping("/verify/{reference}")
-//    public ResponseEntity<VerifyPaymentResponse> verifyPayment(@PathVariable String reference) {
-//        VerifyPaymentResponse verifyPaymentResponse = paymentService.verifyPayment(reference);
-//        if (verifyPaymentResponse != null) {
-//            return ResponseEntity.ok(verifyPaymentResponse);
-//        } else {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        }
-//    }
+    @PostMapping("/initialize")
+    public ResponseEntity<PaymentResponse> initializePayment(@Valid @RequestBody PaymentRequest paymentRequest) {
+        PaymentResponse paymentResponse = paymentService.initializePayment(paymentRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(paymentResponse);
+    }
+    @GetMapping("/verify/{reference}")
+    public ResponseEntity<VerifyPaymentResponse> verifyPayment(@PathVariable String reference) {
+        VerifyPaymentResponse verifyPaymentResponse = paymentService.verifyPayment(reference);
+        if (verifyPaymentResponse != null) {
+            return ResponseEntity.ok(verifyPaymentResponse);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
 }

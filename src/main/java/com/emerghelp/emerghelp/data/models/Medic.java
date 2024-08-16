@@ -2,6 +2,7 @@ package com.emerghelp.emerghelp.data.models;
 
 
 
+import com.emerghelp.emerghelp.data.constants.Gender;
 import com.emerghelp.emerghelp.data.constants.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,5 +37,6 @@ public class Medic {
     private Boolean isAvailable;
     private double longitude;
     private double latitude;
+    private Gender gender;
 
 }

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/api/v1/medics")
+@RequestMapping("/api/medics")
 @AllArgsConstructor
 public class OrderMedicController {
 

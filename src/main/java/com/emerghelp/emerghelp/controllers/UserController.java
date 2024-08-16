@@ -15,25 +15,25 @@ import java.util.Map;
 
 
 @RestController
-@RequestMapping("/api/v1/create-user")
+@RequestMapping("/api/users/create-user")
 @AllArgsConstructor
 public class UserController {
 
     private final UserService userService;
-//
-//    @PostMapping
-//    public ResponseEntity<HttpResponses> createUser(@RequestBody RegisterUserRequest request) {
-//        RegisterUserResponse newUser = userService.register(request);
-//        return ResponseEntity.created(URI.create("")).body(
-//                HttpResponses.builder()
-//                        .timeStamp(LocalDateTime.now().toString())
-//                        .data(Map.of("user", newUser))
-//                        .message("User created")
-//                        .status(HttpStatus.CREATED)
-//                        .statusCode(HttpStatus.CREATED.value())
-//                        .build()
-//        );
-//    }
+
+    @PostMapping
+    public ResponseEntity<HttpResponses> createUser(@RequestBody RegisterUserRequest request) {
+        RegisterUserResponse newUser = userService.register(request);
+        return ResponseEntity.created(URI.create("")).body(
+                HttpResponses.builder()
+                        .timeStamp(LocalDateTime.now().toString())
+                        .data(Map.of("user", newUser))
+                        .message("User created")
+                        .status(HttpStatus.CREATED)
+                        .statusCode(HttpStatus.CREATED.value())
+                        .build()
+        );
+    }
 
 
 

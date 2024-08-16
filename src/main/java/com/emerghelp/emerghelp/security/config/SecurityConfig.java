@@ -39,12 +39,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(c->
                         c.requestMatchers(POST,"/api/v1/auth").permitAll()
                                 .requestMatchers("/api/users/create-user").permitAll()
+                                .requestMatchers("/api/medics/create-medic").permitAll()
                                 .requestMatchers("/api/payments/initialize").permitAll()
                                 .requestMatchers("/admin/register").permitAll()
                                 .requestMatchers("/admin/deactivate").permitAll()
-                                .requestMatchers("/api/v1/medics/accept-order").hasAnyAuthority("MEDIC")
+                                .requestMatchers("/api/medics/accept-order").permitAll()
                                 .requestMatchers("/admin/activate").permitAll()
-                                .requestMatchers("/api/v1/medics/order").hasAnyAuthority("USER")
+                                .requestMatchers("/api/medics/order").permitAll()
                                 .anyRequest().authenticated())
                                 .build();
     }
