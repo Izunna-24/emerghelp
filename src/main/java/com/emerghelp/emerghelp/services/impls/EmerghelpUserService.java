@@ -32,11 +32,7 @@ import static com.emerghelp.emerghelp.data.constants.Role.USER;
 public class EmerghelpUserService implements UserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
-    private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
-
-    private final OrderMedicRepository orderMedicRepository;
-
 
 
     @Autowired
@@ -46,9 +42,7 @@ public class EmerghelpUserService implements UserService {
                                 EmailService emailService, OrderMedicRepository orderMedicRepository) {
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
-        this.orderMedicRepository = orderMedicRepository;
 
     }
 
