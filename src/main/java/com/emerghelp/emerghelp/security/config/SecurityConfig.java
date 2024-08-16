@@ -42,8 +42,9 @@ public class SecurityConfig {
                                 .requestMatchers("/api/payments/initialize").permitAll()
                                 .requestMatchers("/admin/register").permitAll()
                                 .requestMatchers("/admin/deactivate").permitAll()
+                                .requestMatchers("/api/v1/medics/accept-order").hasAnyAuthority("MEDIC")
                                 .requestMatchers("/admin/activate").permitAll()
-                                .requestMatchers("/api/v1/request").hasAnyAuthority("USER")
+                                .requestMatchers("/api/v1/medics/order").hasAnyAuthority("USER")
                                 .anyRequest().authenticated())
                                 .build();
     }

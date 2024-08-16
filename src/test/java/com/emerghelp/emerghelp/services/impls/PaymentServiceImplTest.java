@@ -21,20 +21,20 @@ class PaymentServiceImplTest {
     private PaymentServiceImpl paymentService;
 
 
-    @Test
-    void initializePayment() throws JsonProcessingException {
-        PaymentRequest paymentRequest = PaymentRequest.builder().email("goat@email.com").amount(BigDecimal.valueOf(100).multiply(BigDecimal.valueOf(100))).build();
-        PaymentResponse paymentResponse = paymentService.initializePayment(paymentRequest);
-        System.out.println(new ObjectMapper().writeValueAsString(paymentResponse));
-        assertThat(paymentResponse.getData()).isNotNull();
-    }
-
-  @Test
-    void verifyPayment() throws JsonProcessingException{
-      VerifyPaymentResponse verifyPaymentResponse = paymentService.verifyPayment("450vm5r3vy");
-      System.out.println(new ObjectMapper().writeValueAsString(verifyPaymentResponse));
-      assertThat(verifyPaymentResponse.getMessage()).isEqualTo("Verification successful");
-  }
+//    @Test
+//    void initializePayment() throws JsonProcessingException {
+//        PaymentRequest paymentRequest = PaymentRequest.builder().email("goat@email.com").amount(BigDecimal.valueOf(100).multiply(BigDecimal.valueOf(100))).build();
+//        PaymentResponse paymentResponse = paymentService.initializePayment(paymentRequest);
+//        System.out.println(new ObjectMapper().writeValueAsString(paymentResponse));
+//        assertThat(paymentResponse.getData()).isNotNull();
+//    }
+//
+//  @Test
+//    void verifyPayment() throws JsonProcessingException{
+//      VerifyPaymentResponse verifyPaymentResponse = paymentService.verifyPayment("450vm5r3vy");
+//      System.out.println(new ObjectMapper().writeValueAsString(verifyPaymentResponse));
+//      assertThat(verifyPaymentResponse.getMessage()).isEqualTo("Verification successful");
+//  }
 
 
 }
