@@ -106,7 +106,6 @@ public class MedicControllerTest {
                                 .andExpect(status().isCreated())
                                 .andDo(print());
                     } catch (Exception exception) {
-                        exception.printStackTrace();
                         fail("Exception occurred during test: " + exception.getMessage());
                     }
                 }
