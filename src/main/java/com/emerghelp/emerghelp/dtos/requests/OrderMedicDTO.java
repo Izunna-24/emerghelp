@@ -8,6 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderMedicDTO {
+   private Long id;
    private double longitude;
    private double latitude;
    private String description;

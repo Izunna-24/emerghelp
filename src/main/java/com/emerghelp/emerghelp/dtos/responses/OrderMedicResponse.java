@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 public class OrderMedicResponse {
-    private Long id;
     private List<Medic> availableMedic;
+    private double latitude;
+    private double longitude;
 }

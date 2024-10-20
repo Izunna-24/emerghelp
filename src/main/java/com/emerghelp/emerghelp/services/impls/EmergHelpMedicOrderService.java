@@ -12,10 +12,7 @@ import com.emerghelp.emerghelp.dtos.requests.OrderMedicDTO;
 import com.emerghelp.emerghelp.dtos.responses.AcceptOrderMedicResponse;
 import com.emerghelp.emerghelp.dtos.responses.OrderMedicResponse;
 import com.emerghelp.emerghelp.dtos.responses.OrderMedicHistory;
-import com.emerghelp.emerghelp.exceptions.MedicNotFoundException;
-import com.emerghelp.emerghelp.exceptions.MedicTooFarException;
-import com.emerghelp.emerghelp.exceptions.OrderMedicNotFoundException;
-import com.emerghelp.emerghelp.exceptions.UserNotFoundException;
+import com.emerghelp.emerghelp.exceptions.*;
 import com.emerghelp.emerghelp.services.MedicOrderService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,21 +43,28 @@ public class EmergHelpMedicOrderService implements MedicOrderService {
         this.medicRepository = medicRepository;
     }
 
+
     @Override
     public OrderMedicResponse orderMedic(OrderMedicDTO orderMedicDTO) {
-        User user = userRepository.findById(orderMedicDTO.getUserId())
+        validateCoordinates(orderMedicDTO.getLatitude(), orderMedicDTO.getLongitude());
+        User user = userRepository.findById(orderMedicDTO.getId())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         OrderMedic orderMedic = buildMedicRequest(orderMedicDTO, user);
-        OrderMedic savedMedic = orderMedicRepository.save(orderMedic);
-        List<Medic> allMedic = medicRepository.findAll();
-        List<Medic> availableMedic = allMedic.stream()
-                .filter(medic -> calculateDistance(medic, orderMedic) < 30)
-                .toList();
+        List<Medic> availableMedic = medicRepository.findAvailableMedicsWithinDistance(
+                orderMedic.getLatitude(),
+                orderMedic.getLongitude(),
+                30
+        );
+        if (availableMedic.isEmpty()) {
+            throw new MedicNotFoundException("No medic close to you");
+        }
         OrderMedicResponse medicRequestResponse = new OrderMedicResponse();
         medicRequestResponse.setAvailableMedic(availableMedic);
-        medicRequestResponse.setId(savedMedic.getId());
-        return  medicRequestResponse;
+        return medicRequestResponse;
     }
+
+
+
     @Override
     public OrderMedic getMedicOrderBy(long id) {
         return orderMedicRepository.findById(id)
@@ -122,5 +126,10 @@ public class EmergHelpMedicOrderService implements MedicOrderService {
         return EARTH_RADIUS * c;
     }
 
+    private void validateCoordinates(double latitude, double longitude) {
+        if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {
+            throw new InvalidCoordinatesException("Latitude and longitude must be valid geographical coordinates.");
+        }
+    }
 
 }
