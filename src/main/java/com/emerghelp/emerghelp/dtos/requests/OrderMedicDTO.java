@@ -11,4 +11,5 @@ public class OrderMedicDTO {
    private double longitude;
    private double latitude;
    private String description;
+
 }
